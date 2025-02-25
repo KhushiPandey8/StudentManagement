@@ -100,23 +100,40 @@ export const authenticateJWT = (req, res, next) => {
     });
 };
 
-export const getAttendance = (req, res) => {
-    const { name_contactid } = req.user;  
+export const getBatchTimings = (req, res) => {
+    const { name_contactid } = req.user; // Get logged-in student details
 
     if (!name_contactid) {
-        return res.status(400).json({ message: "Missing name_contactid parameter." });
+        return res.status(400).json({ message: "User not authenticated" });
     }
 
-    const query = 'SELECT date, topic, attendence, batchno FROM attendence WHERE name = ?';
+    const query = "SELECT DISTINCT batchtime FROM attendence WHERE name = ?";
 
     db.query(query, [name_contactid], (err, results) => {
         if (err) {
-            console.error('Error fetching student attendance:', err);
-            return res.status(500).json({ message: 'Server error' });
+            console.error("Error fetching batch timings:", err);
+            return res.status(500).json({ message: "Database error" });
         }
 
-        if (results.length === 0) {
-            return res.status(404).json({ message: "No attendance records found." });
+        const batchTimings = results.map((row) => row.batchtime);
+        res.json(batchTimings);
+    });
+};
+
+export const getAttendance = (req, res) => {
+    const { batchtime } = req.query;
+    const { name_contactid } = req.user; // Ensure logged-in user
+
+    if (!batchtime || !name_contactid) {
+        return res.status(400).json({ message: "Missing batchtime or user info." });
+    }
+
+    const query = "SELECT date, topic, attendence FROM attendence WHERE batchtime = ? AND name = ?";
+
+    db.query(query, [batchtime, name_contactid], (err, results) => {
+        if (err) {
+            console.error("Error fetching attendance:", err);
+            return res.status(500).json({ message: "Database error" });
         }
 
         res.json(results);

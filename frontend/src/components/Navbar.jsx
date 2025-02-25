@@ -36,7 +36,7 @@ function Navbar() {
             {[
               { name: "My Batches", icon: images.worksheet, link: "/timetable" },
               { name: "Notes", icon: images.notes, link: "/notes" },
-              { name: "Attendance", icon: images.attend, link: "/attend" },
+              { name: "Attendance", icon: images.attend, link: "/batchtiming" },
               { name: "Fees History", icon: images.payment, link: "/fee-history" },
               { name: "Exam Reg", icon: images.exam, link: "/exam" },
               { name: "Setting", icon: images.Settings, link: "/settings" },

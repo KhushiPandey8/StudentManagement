@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { logoutSuccess } from "../redux/store";
+import { logout } from "../redux/store";
 import images from "../constant/Icon";
 
 function Footer({ setUser }) { 
@@ -16,7 +16,7 @@ function Footer({ setUser }) {
     })
     .then(response => response.json())
     .then(() => {
-        dispatch(logoutSuccess());
+        dispatch(logout());
         if (setUser) setUser(null);
         navigate("/login");
     })
