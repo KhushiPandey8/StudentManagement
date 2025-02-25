@@ -1,0 +1,127 @@
+import db from '../utils/db.js';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+
+dotenv.config();
+const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
+
+// Multer Configuration for Profile Picture Upload
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadDir = 'uploads/profile_pics/';
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+export const upload = multer({ storage }).single('profile_pic');
+
+// 📌 USER LOGIN FUNCTION
+export const login = (req, res) => {
+    const { contact, password } = req.body;
+
+    if (!contact || !password) {
+        return res.status(400).json({ message: "Contact number and password are required." });
+    }
+
+    const sql = "SELECT id, contact, password, name, branch, course, photo, name_contactid FROM student WHERE contact = ?";
+    
+    db.query(sql, [contact], (err, result) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ message: "Database error" });
+        }
+
+        if (result.length === 0) {
+            return res.status(401).json({ message: "Invalid Username or Password" });
+        }
+
+        const user = result[0];
+
+        // Generate JWT Token
+        const token = jwt.sign({ id: user.id, name_contactid: user.name_contactid }, SECRET_KEY, { expiresIn: '1h' });
+
+        res.json({
+            token,
+            user: {
+                id: user.id,
+                contact: user.contact,
+                name: user.name,
+                name_contactid: user.name_contactid,
+                branch: user.branch,
+                course: user.course,
+                photo: user.photo ? `http://localhost:5000/${user.photo}` : null
+            }
+        });
+    });
+};
+
+// 📌 UPDATE PROFILE PICTURE FUNCTION
+export const updateProfilePicture = (req, res) => {
+    const { id } = req.body;
+    const profilePic = req.file ? req.file.path : null;
+
+    if (!id || !profilePic) {
+        return res.status(400).json({ message: "User ID and profile picture are required." });
+    }
+
+    const sql = "UPDATE student SET photo = ? WHERE id = ?";
+    
+    db.query(sql, [profilePic, id], (err, result) => {
+        if (err) {
+            console.error("Error updating profile picture:", err);
+            return res.status(500).json({ message: "Database error" });
+        }
+
+        res.json({ message: "Profile picture updated successfully", photo: `http://localhost:5000/${profilePic}` });
+    });
+};
+
+// Middleware for JWT authentication
+export const authenticateJWT = (req, res, next) => {
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ message: "Unauthorized: No token provided" });
+    }
+
+    jwt.verify(token, SECRET_KEY, (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: "Forbidden: Invalid token" });
+        }
+        req.user = decoded;
+        next();
+    });
+};
+
+// 📌 GET ATTENDANCE FUNCTION
+export const getAttendance = (req, res) => {
+    const { name_contactid } = req.user;  
+
+    if (!name_contactid) {
+        return res.status(400).json({ message: "Missing name_contactid parameter." });
+    }
+
+    const query = 'SELECT date, topic, attendence,batchno FROM attendence WHERE name = ?';
+
+    db.query(query, [name_contactid], (err, results) => {
+        if (err) {
+            console.error('Error fetching student attendance:', err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: "No attendance records found." });
+        }
+
+        res.json(results);
+    });
+};
