@@ -100,7 +100,6 @@ export const authenticateJWT = (req, res, next) => {
     });
 };
 
-// Get Attendance
 export const getAttendance = (req, res) => {
     const { name_contactid } = req.user;  
 
