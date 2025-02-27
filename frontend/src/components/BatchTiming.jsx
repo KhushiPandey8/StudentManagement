@@ -39,10 +39,10 @@ function BatchTiming() {
   };
 
   return (
-    <div className="inset-0 h-screen w-screen flex flex-col md:flex-row">
+    <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
         <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">Batch Timings</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-4 mt-5 ">Batch Timings</h1>
         <table className="w-[800px] border-collapse bg-white shadow-md rounded-lg overflow-hidden">
           <thead>
             <tr className="bg-blue-500 text-white">

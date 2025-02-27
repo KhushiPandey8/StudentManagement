@@ -28,25 +28,35 @@ function Attendance() {
   }, [navigate, user, token, batchtime]);
 
   return (
-    <div className="inset-0 h-screen w-screen flex flex-col md:flex-row">
-        <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
+    <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
+      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">Attendance Details</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-4 mt-5">
+          Attendance Details
+        </h1>
         <table className="w-[800px] border-collapse bg-white shadow-md rounded-lg overflow-hidden">
           <thead>
             <tr className="bg-green-500 text-white">
-              <th className="p-3 text-left">Date</th>
-              <th className="p-3 text-left">Topic</th>
-              <th className="p-3 text-left">Status</th>
+              <th className="p-3 text-center">Date</th>
+              <th className="p-3 text-center">Topic</th>
+              <th className="p-3 text-center">Status</th>
             </tr>
           </thead>
           <tbody>
             {attendance.length > 0 ? (
               attendance.map((record, index) => (
                 <tr key={index} className="border-b hover:bg-gray-100">
-                  <td className="p-3">{record.date}</td>
-                  <td className="p-3">{record.topic}</td>
-                  <td className="p-3">{record.attendence}</td>
+                  <td className="p-3 text-center">{record.date}</td>
+                  <td className="p-3 text-center">{record.topic}</td>
+                  <td
+                    className={`p-3 text-center font-semibold ${
+                      record.attendence === "Present"
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {record.attendence}
+                  </td>
                 </tr>
               ))
             ) : (
