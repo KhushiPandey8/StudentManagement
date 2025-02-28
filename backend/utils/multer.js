@@ -4,24 +4,27 @@ import path from "path";
 // Configure storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Save images in the "uploads" directory
+    cb(null, "uploads/"); // Save files in the uploads directory
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Rename file with timestamp and original extension
+    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
   },
 });
 
-// File filter: allow only jpg, jpeg, and png files
+// File filter for only allowing specific formats
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
-  if (mimetype && extname) {
-    return cb(null, true);
+  const allowedTypes = [
+    "image/jpeg", "image/png", "image/jpg", "application/pdf",
+    "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  ];
+
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
   } else {
-    cb(new Error("Only images of type jpg, jpeg, or png are allowed."));
+    cb(new Error("Unsupported file type"), false);
   }
 };
 
-const upload = multer({ storage: storage, fileFilter: fileFilter });
+const upload = multer({ storage, fileFilter });
+
 export default upload;

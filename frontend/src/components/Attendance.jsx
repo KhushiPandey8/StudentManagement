@@ -5,7 +5,6 @@ import Logo from "./Logo";
 import Image from "./Image";
 import Footer from "./Footer";
 
-
 function Attendance() {
   const [attendance, setAttendance] = useState([]);
   const { user, token } = useSelector((state) => state.auth);
@@ -29,45 +28,50 @@ function Attendance() {
 
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
-      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
+        <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
         <h1 className="text-2xl font-bold text-gray-800 mb-4 mt-5">
           Attendance Details
         </h1>
-        <table className="w-[800px] border-collapse bg-white shadow-md rounded-lg overflow-hidden">
-          <thead>
-            <tr className="bg-green-500 text-white">
-              <th className="p-3 text-center">Date</th>
-              <th className="p-3 text-center">Topic</th>
-              <th className="p-3 text-center">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {attendance.length > 0 ? (
-              attendance.map((record, index) => (
-                <tr key={index} className="border-b hover:bg-gray-100">
-                  <td className="p-3 text-center">{record.date}</td>
-                  <td className="p-3 text-center">{record.topic}</td>
-                  <td
-                    className={`p-3 text-center font-semibold ${
-                      record.attendence === "Present"
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {record.attendence}
+
+        {/* Responsive Table */}
+        <div className="w-full overflow-x-auto">
+          <table className="min-w-[60px] w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+            <thead>
+              <tr className="bg-green-500 text-white text-sm md:text-base">
+                <th className="p-3 text-center">Date</th>
+                <th className="p-3 text-center">Topic</th>
+                <th className="p-3 text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {attendance.length > 0 ? (
+                attendance.map((record, index) => (
+                  <tr key={index} className="border-b hover:bg-gray-100 text-sm md:text-base">
+                    <td className="p-3 text-center">{record.date}</td>
+                    <td className="p-3 text-center">{record.topic}</td>
+                    <td
+                      className={`p-3 text-center font-semibold ${
+                        record.attendence === "Present"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {record.attendence}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="text-center text-gray-500 py-4">
+                    No attendance records found.
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="3" className="text-center text-gray-500 py-4">
-                  No attendance records found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
+
         <Footer />
       </div>
       <Image />

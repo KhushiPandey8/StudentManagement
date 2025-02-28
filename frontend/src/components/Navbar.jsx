@@ -20,11 +20,12 @@ function Navbar() {
       <div className="inset-0 h-screen w-screen flex flex-col md:flex-row">
         <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
           <Logo />
+          <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
           <div className="text-center text-sm md:text-md font-mono font-bold py-4 flex flex-col items-center">
             <img
               src={user.photo || "N/A"}
               alt="Profile Light"
-              className="h-14 w-14 md:h-14 md:w-14 rounded-full shadow-md"
+              className="w-20 h-20 md:w-20 md:h-20 object-cover rounded-full border-4 border-blue-500 shadow-lg"
             />
             <h1 className="mt-2 text-base md:text-lg">{user.name || "Guest"}</h1>
             <p className="text-gray-600 text-xs md:text-sm">Branch: {user.branch || "N/A"}</p>
@@ -63,6 +64,7 @@ function Navbar() {
               </Link>
             ))}
           </nav>
+          </div>
           <Footer />
         </div>
 

@@ -33,6 +33,9 @@ function Profile() {
                   ? user.photo
                   : "https://dummyimage.com/150x150/cccccc/ffffff"
               }
+              onError={(e) =>
+                (e.target.src = "https://dummyimage.com/150x150/cccccc/ffffff")
+              }
               alt="Profile"
               className="w-28 h-28 md:w-32 md:h-32 object-cover rounded-full border-4 border-blue-500 shadow-lg"
             />
@@ -54,7 +57,7 @@ function Profile() {
               </p>
             </div>
 
-            <div className="p-4 bg-white rounded-lg shadow">
+            <div className="mt-4 p-4 bg-white rounded-lg shadow">
               <p className="text-base md:text-lg text-gray-700">
                 <strong>Contact:</strong> {user.contact}
               </p>
@@ -65,12 +68,19 @@ function Profile() {
                 <strong>Password:</strong> {user.password}
               </p>
             </div>
-            <div className="p-4 bg-white rounded-lg shadow">
+            <div className="p-4 mt-4  bg-white rounded-lg shadow">
               <p className="text-base md:text-lg text-gray-700">
                 <strong>Branch:</strong> {user.branch || "Not Provided"}
               </p>
-              <p className={`text-base md:text-lg text-gray-700 `}> 
-                <strong>Status:</strong> <span className={`${user.status === "Active" ? "text-red-600" : "text-green-600"}`}>{user.status || "Not Provided"}</span>
+              <p className={`text-base md:text-lg text-gray-700 `}>
+                <strong>Status:</strong>{" "}
+                <span
+                  className={`${
+                    user.status === "Active" ? "text-red-600" : "text-green-600"
+                  }`}
+                >
+                  {user.status || "Not Provided"}
+                </span>
               </p>
               <p className="text-base md:text-lg text-gray-700">
                 <strong>Address:</strong> {user.address || "Not Provided"}
