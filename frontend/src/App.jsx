@@ -17,6 +17,7 @@ import ProtectedRoute from "./components/ProtectesRoute";
 import EditProfile from "./components/EditProfile";
 import Profile from "./components/Profile";
 import BatchTiming from "./components/BatchTiming";
+import Courses from "./components/Courses";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> }, 
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
   { path: "/profile", element: <ProtectedRoute><Profile /></ProtectedRoute> },
   { path: "/edit", element: <ProtectedRoute><EditProfile /></ProtectedRoute> },
   { path: "/batchtiming", element: <ProtectedRoute><BatchTiming /></ProtectedRoute> },
+  { path: "/course", element: <ProtectedRoute><Courses /></ProtectedRoute> },
 ]);
 
 function App() {

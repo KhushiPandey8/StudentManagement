@@ -58,7 +58,7 @@ function BatchTiming() {
                 batchTimings.map((batch, index) => (
                   <tr key={index} className="border-b hover:bg-gray-100 text-sm md:text-base">
                     <td className="p-3">{batch}</td>
-                    <td className="p-3 text-center">
+                    <td className="p-3 text-center"> 
                       <button
                         onClick={() => handleViewAttendance(batch)}
                         className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"

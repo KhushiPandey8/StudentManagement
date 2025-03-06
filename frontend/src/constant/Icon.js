@@ -17,6 +17,7 @@ import home from '../assets/icons/home-button.png'
 import notify from '../assets/icons/notification.png'
 import logout from '../assets/icons/logout.png'
 import attend from '../assets/icons/attend.png'
+import learn from '../assets/icons/course.png'
 const images = {
     algo,
     exam,
@@ -36,7 +37,8 @@ const images = {
     home,
     notify,
     logout,
-    attend
+    attend,
+    learn
 
 }
 export default images;

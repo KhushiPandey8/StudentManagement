@@ -76,6 +76,71 @@ export const authenticateJWT = (req, res, next) => {
     next();
   });
 };
+export const getBatch = (req, res) => {
+  const { name_contactid } = req.user; 
+
+  if (!name_contactid) {
+      return res.status(400).json({ message: "User not authenticated" });
+  }
+
+  const query = `
+      SELECT DISTINCT a.batchtime, a.Subject, a.course 
+      FROM attendence a
+      JOIN faculty_student fs ON fs.nameid = a.name
+      WHERE fs.name = ?;
+  `;
+
+  db.query(query, [name_contactid], (err, results) => {
+      if (err) {
+          console.error("Error fetching batch timings:", err);
+          return res.status(500).json({ message: "Database error" });
+      }
+      res.json(results);
+  });
+};
+
+
+export const getFilteredBatchTimings = (req, res) => {
+  const { status } = req.query;
+  const { name_contactid } = req.user;
+  console.log("Received Name ID:", name_contactid);
+  console.log("Received Status:", status);
+
+  if (!name_contactid) {
+      return res.status(400).json({ message: "User not authenticated" });
+  }
+
+  let query = "";
+  if (status === "Pending") {
+      query = `
+          SELECT DISTINCT course, subject
+          FROM faculty_student
+          WHERE nameid = ? AND status = 'Pending';
+      `;
+  } else if (status === "Pursuing") {
+      query = `
+          SELECT DISTINCT batch_time, course, subject
+          FROM faculty_student
+          WHERE nameid = ? AND status = 'Pursuing';
+      `;
+  } else if (status === "Completed") {
+      query = `
+          SELECT DISTINCT batch_time, course, subject
+          FROM faculty_student
+          WHERE nameid = ? AND status = 'Completed';
+      `;
+  } else {
+      return res.status(400).json({ message: "Invalid status" });
+  }
+
+  db.query(query, [name_contactid], (err, results) => {
+      if (err) {
+          console.error("Error fetching filtered batch timings:", err);
+          return res.status(500).json({ message: "Database error" });
+      }
+      res.json(results);
+  });
+};
 
 // Get Batch Timings
 export const getBatchTimings = (req, res) => {
@@ -85,7 +150,7 @@ export const getBatchTimings = (req, res) => {
     return res.status(400).json({ message: "User not authenticated" });
   }
 
-  const query = "SELECT DISTINCT batchtime FROM attendence WHERE name = ?";
+  const query = "SELECT DISTINCT batchtime, Subject, course FROM attendence WHERE name = ?";
   db.query(query, [name_contactid], (err, results) => {
     if (err) {
       console.error("Error fetching batch timings:", err);
@@ -96,17 +161,39 @@ export const getBatchTimings = (req, res) => {
   });
 };
 
-// Get Attendance
+export const getBatchTimetable = (req, res) => {
+  const { name_contactid } = req.user; // Get logged-in student details
+
+  if (!name_contactid) {
+    return res.status(400).json({ message: "User not authenticated" });
+  }
+
+  const query = "SELECT DISTINCT batchtime, faculty, Subject, course FROM attendence WHERE name = ?";
+  db.query(query, [name_contactid], (err, results) => {
+    if (err) {
+      console.error("Error fetching batch timings:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
+    res.json(results); // Send full results
+  });
+};
+
 export const getAttendance = (req, res) => {
   const { batchtime } = req.query;
-  const { name_contactid } = req.user; // Ensure logged-in user
+  const { name_contactid } = req.user;
 
   if (!batchtime || !name_contactid) {
     return res.status(400).json({ message: "Missing batchtime or user info." });
   }
 
-  const query = "SELECT date, topic, attendence FROM attendence WHERE batchtime = ? AND name = ?";
-  db.query(query, [batchtime, name_contactid], (err, results) => {
+  const query = `
+    SELECT DISTINCT a.date, a.topic, a.attendence, a.Subject , a.batchtime
+    FROM attendence a
+    JOIN faculty_student fs ON a.batchtime = fs.batch_time AND a.Subject = fs.subject AND a.course = fs.course
+    WHERE fs.nameid = ? AND fs.batch_time = ?;
+  `;
+ 
+  db.query(query, [name_contactid, batchtime], (err, results) => {
     if (err) {
       console.error("Error fetching attendance:", err);
       return res.status(500).json({ message: "Database error" });
@@ -114,6 +201,25 @@ export const getAttendance = (req, res) => {
     res.json(results);
   });
 };
+
+// // Get Attendance
+// export const getAttendance = (req, res) => {
+//   const { batchtime } = req.query;
+//   const { name_contactid } = req.user; // ensure logged-in user
+
+//   if (!batchtime || !name_contactid) {
+//     return res.status(400).json({ message: "Missing batchtime or user info." });
+//   }
+
+//   const query = "SELECT date, topic, attendence, Subject FROM attendence WHERE batchtime = ? AND name = ?";
+//   db.query(query, [batchtime, name_contactid], (err, results) => {
+//     if (err) {
+//       console.error("Error fetching attendance:", err);
+//       return res.status(500).json({ message: "Database error" });
+//     }
+//     res.json(results);
+//   });
+// };
 
 // Get Fee Details
 export const getFeeDetails = (req, res) => {
@@ -139,6 +245,25 @@ export const getFeeDetails = (req, res) => {
   });
 };
 
+export const getCourse = (req, res) => {
+  const { name_contactid } = req.user; 
+  if (!name_contactid) {
+    return res.status(400).json({ message: "User not authenticated" });
+  }
+  const query = `
+    SELECT 
+      course, subject, batch_time, status, startdate, endate,nameid
+    FROM faculty_student
+    WHERE nameid = ?`;
+
+  db.query(query, [name_contactid], (err, results) => {
+    if (err) {
+      console.error("Error fetching course details:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
+    res.json(results);
+  });
+}
 
 
 export const updateProfile = (req, res) => {
@@ -204,40 +329,27 @@ export const updateProfile = (req, res) => {
 };
 
 
-
-// Upload Notes
 export const uploadNote = (req, res) => {
-  const { title, description } = req.body;
-  const file_path = req.file ? `/uploads/${req.file.filename}` : null;
-  const user = req.user; // User details from authentication middleware
-
-  if (!title || !req.file) {
-    return res.status(400).json({ message: "Title and file are required." });
+  if (!req.file) {
+    return res.status(400).json({ message: "File upload failed" });
   }
 
-  const sql = `INSERT INTO notes (title, description, file_path, user_id, name, contact, name_contactid)
-               VALUES (?, ?, ?, ?, ?, ?, ?)`;
-
-  db.query(
-    sql,
-    [title, description, file_path, user.id, user.name, user.contact, user.name_contactid],
-    (err, result) => {
-      if (err) {
-        console.error("Error uploading note:", err);
-        return res.status(500).json({ message: "Database error" });
-      }
-      res.status(201).json({ message: "Note uploaded successfully", file_path });
+  const { title, description } = req.body;
+  const filePath = req.file.filename;
+  const { name_contactid} = req.user; // Get authenticated user
+  const query = "INSERT INTO notes (title, description, file_path ,name_contactid) VALUES (?, ?, ?, ?)";
+  db.query(query, [title, description, filePath, name_contactid], (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ message: "Database error" });
     }
-  );
+    res.status(201).json({ message: "Note uploaded successfully" });
+  });
 };
 
-// Get User Notes
+// Get all notes
 export const getNotes = (req, res) => {
-  const user_id = req.user.id;
-  
-  const sql = "SELECT * FROM notes WHERE user_id = ?";
-  
-  db.query(sql, [user_id], (err, results) => {
+  db.query("SELECT * FROM notes", (err, results) => {
     if (err) {
       console.error("Error fetching notes:", err);
       return res.status(500).json({ message: "Database error" });
@@ -246,15 +358,29 @@ export const getNotes = (req, res) => {
   });
 };
 
-// Download File
-export const downloadFile = (req, res) => {
-  const { file } = req.params;
-  const filePath = `uploads/${file}`;
-  
-  res.download(filePath, (err) => {
-    if (err) {
-      console.error("File download error:", err);
-      res.status(500).json({ message: "Error downloading file" });
-    }
+export const deleteNote = (req, res) => {
+  if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized: No user found in request" });
+  }
+
+  const { id } = req.params;
+  const { name_contactid } = req.user; // Ensure user owns the note
+
+  console.log(`Deleting note with ID: ${id}`); // Debugging log
+
+  if (!id) {
+      return res.status(400).json({ message: "Note ID is required" });
+  }
+
+  const query = "DELETE FROM notes WHERE id = ? AND name_contactid = ?";
+  db.query(query, [id, name_contactid], (err, result) => {
+      if (err) {
+          console.error("Database error:", err);
+          return res.status(500).json({ message: "Database error" });
+      }
+      if (result.affectedRows === 0) {
+          return res.status(404).json({ message: "Note not found or unauthorized" });
+      }
+      res.json({ message: "Note deleted successfully" });
   });
 };

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Logo from "./Logo";
 import Footer from "./Footer";
 import Image from "./Image";
@@ -9,6 +10,7 @@ import "../App.css";
 function Profile() {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   if (!user) {
     return (
@@ -64,11 +66,18 @@ function Profile() {
               <p className="text-base md:text-lg text-gray-700">
                 <strong>Email:</strong> {user.EmailId || "Not Provided"}
               </p>
-              <p className="text-base md:text-lg text-gray-700">
-                <strong>Password:</strong> {user.password}
+              <p className="text-base md:text-lg text-gray-700 flex items-center">
+                <strong>Password:</strong> 
+                <span className="ml-2">{showPassword ? user.password : "●●●●●●"}</span>
+                <button
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="ml-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </p>
             </div>
-            <div className="p-4 mt-4  bg-white rounded-lg shadow">
+            <div className="p-4 mt-4 bg-white rounded-lg shadow">
               <p className="text-base md:text-lg text-gray-700">
                 <strong>Branch:</strong> {user.branch || "Not Provided"}
               </p>

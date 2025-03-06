@@ -35,28 +35,31 @@ function FeeHistory() {
                   <th className="border border-gray-500 p-2 text-center">
                     Receipt
                   </th>
+                  <th className="border border-gray-500 p-2 text-center">
+                    Date
+                  </th>
                   {/* <th className="border border-gray-500 p-2">Name</th> */}
                   <th className="border border-gray-500 p-2 text-center">
                     Course
                   </th>
                   <th className="border border-gray-500 p-2 text-center">
-                    Received
-                  </th>
-                  <th className="border border-gray-500 p-2 text-center">
-                    Date
-                  </th>
-                  <th className="border border-gray-500 p-2 text-center">
-                    Mode of Payment
-                  </th>
-                  <th className="border border-gray-500 p-2 text-center">
                     Course Fees
                   </th>
                   <th className="border border-gray-500 p-2 text-center">
-                    Paid
+                    Fees Paid
                   </th>
                   <th className="border border-gray-500 p-2 text-center">
-                    Balance
+                    Fees Balance
                   </th>
+
+                  <th className="border border-gray-500 p-2 text-center">
+                    Mode of Payment
+                  </th>
+
+                  <th className="border border-gray-500 p-2 text-center">
+                    Received
+                  </th>
+
                   <th className="border border-gray-500 p-2 text-center">
                     Status
                   </th>
@@ -68,30 +71,31 @@ function FeeHistory() {
                     <td className="border border-gray-500 p-2 text-center">
                       {fee.Receipt || "N/A"}
                     </td>
+                    <td className="border border-gray-500 p-2 text-center">
+                      {fee.Dates  || "N/A"}
+                    </td>
                     {/* <td className="border border-gray-500 p-2">{fee.name}</td> */}
                     <td className="border border-gray-500 p-2 text-center">
-                      {fee.course}
+                      {fee.course || "N/A"}
+                    </td>
+                    <td className="border border-gray-500 p-2 text-center">
+                      {fee.courseFees || "N/A"}
+                    </td>
+                    <td className="border border-gray-500 p-2 text-center">
+                      {fee.Paid  || "N/A"}
+                    </td>
+                    <td className="border border-gray-500 p-2 text-center">
+                      {fee.Balance  || "N/A"}
                     </td>
                     <td className="border border-gray-500 p-2 text-center">
                       {fee.Recieve || "N/A"}
                     </td>
+                    
                     <td className="border border-gray-500 p-2 text-center">
-                      {fee.Dates}
+                      {fee.ModeOfPayement  || "N/A"}
                     </td>
                     <td className="border border-gray-500 p-2 text-center">
-                      {fee.ModeOfPayement}
-                    </td>
-                    <td className="border border-gray-500 p-2 text-center">
-                      {fee.courseFees}
-                    </td>
-                    <td className="border border-gray-500 p-2 text-center">
-                      {fee.Paid}
-                    </td>
-                    <td className="border border-gray-500 p-2 text-center">
-                      {fee.Balance}
-                    </td>
-                    <td className="border border-gray-500 p-2 text-center">
-                      {fee.status}
+                      {fee.status  || "N/A"}
                     </td>
                   </tr>
                 ))}

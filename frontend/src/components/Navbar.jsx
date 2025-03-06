@@ -40,11 +40,13 @@ function Navbar() {
               { name: "Notes", icon: images.notes, link: "/notes" },
               { name: "Fees Details", icon: images.payment, link: "/fee-history" },
               { name: "Exam Reg", icon: images.exam, link: "/exam" },
-              { name: "Setting", icon: images.Settings, link: "/settings" },
-              { name: "Remark", icon: images.grade, link: "/grade" },
-              { name: "Feedback", icon: images.satisfaction, link: "/feedback" },
-              { name: "Support", icon: images.support, link: "/support" },
+              { name: "My Courses", icon: images.learn, link: "/course" },
+              { name: "Result", icon: images.grade, link: "/grade" },
               { name: "Leave App", icon: images.leave, link: "/leave" },
+              { name: "Support", icon: images.support, link: "/support" },
+              { name: "Feedback", icon: images.satisfaction, link: "/feedback" },
+              { name: "Setting", icon: images.Settings, link: "/settings" },      
+              
             ].map((item, index) => (
               <Link
                 key={index}
