@@ -11,6 +11,7 @@ function EditProfile() {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
 
   const [formData, setFormData] = useState({
     name: user.name,

@@ -30,16 +30,12 @@ function Courses() {
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
-          <h1 className="text-xl text-center font-bold mb-4">My Course Details</h1>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-500">
-              <thead>
+          <h1 className="text-2xl text-center font-bold mb-4">My Course Details</h1>
+          <div className="w-[800px] overflow-x-auto px-4">
+          <table className="w-full border-collapse border border-gray-300 text-sm md:text-base">
+             <thead>
                 <tr className="bg-gray-200 border border-gray-500">
                   <th className="border border-gray-500 p-3 text-center">Course</th>
-                  <th className="border border-gray-500 p-3 text-center">Subject</th>
-                  <th className="border border-gray-500 p-3 text-center">Batch Timing</th>
-                  <th className="border border-gray-500 p-3 text-center">Start Date</th>
-                  <th className="border border-gray-500 p-3 text-center">End Date</th>
                   <th className="border border-gray-500 p-3 text-center">Status</th>
                 </tr>
               </thead>
@@ -47,10 +43,6 @@ function Courses() {
                 {course.map((crs, index) => (
                   <tr key={index} className="border border-gray-500">
                     <td className="border border-gray-500 p-3 text-center">{crs.course || "N/A"}</td>
-                    <td className="border border-gray-500 p-3 text-center">{crs.subject || "N/A"}</td>
-                    <td className="border border-gray-500 p-3 text-center">{crs.batchtime || "N/A"}</td>
-                    <td className="border border-gray-500 p-3 text-center">{crs.startdate || "N/A"}</td>
-                    <td className="border border-gray-500 p-3 text-center">{crs.endate || "N/A"}</td>
                     <td className="border border-gray-500 p-3 text-center">{crs.status || "N/A"}</td>
                   </tr>
                 ))}

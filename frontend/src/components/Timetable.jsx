@@ -7,24 +7,32 @@ import Image from "./Image";
 
 function Timetable() {
   const [batchTimings, setBatchTimings] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState("Pursuing");
   const { user, token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+
+  // Retrieve last selected status from localStorage or default to "Pursuing"
+  const [selectedStatus, setSelectedStatus] = useState(
+    localStorage.getItem("selectedStatus") || "Pursuing"
+  );
 
   useEffect(() => {
     if (!user || !token) {
       navigate("/login");
       return;
     }
-    fetchFilteredTimings("Pursuing");
+    fetchFilteredTimings(selectedStatus);
   }, [user, token]);
 
   const fetchFilteredTimings = async (status) => {
     try {
       setSelectedStatus(status);
-      const response = await fetch(`http://localhost:3001/filtered-batch-timings?status=${status}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      localStorage.setItem("selectedStatus", status); // Store in localStorage
+      const response = await fetch(
+        `http://localhost:3001/filtered-batch-timings?status=${status}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       const data = await response.json();
       if (response.ok) {
@@ -45,54 +53,81 @@ function Timetable() {
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 mt-5">Batch/Courses History</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-4 mt-5">
+          Batch/Courses History
+        </h1>
 
-        <div className="flex justify-center items-center space-x-4 mt-4 mb-10">
-          <button className="p-2 font-bold text-white bg-red-600 rounded-md" onClick={() => fetchFilteredTimings("Pending")}>Pending</button>
-          <button className="p-2 font-bold text-white bg-green-600 rounded-md" onClick={() => fetchFilteredTimings("Pursuing")}>Pursuing</button>
-          <button className="p-2 font-bold text-white bg-yellow-500 rounded-md" onClick={() => fetchFilteredTimings("Completed")}>Completed</button>
+        <div className="flex space-x-4 mb-5">
+          <button
+            className={`p-2 text-white rounded-md ${
+              selectedStatus === "Pending" ? "bg-red-800" : "bg-red-600"
+            }`}
+            onClick={() => fetchFilteredTimings("Pending")}
+          >
+            Pending
+          </button>
+          <button
+            className={`p-2 text-white rounded-md ${
+              selectedStatus === "Pursuing" ? "bg-green-800" : "bg-green-600"
+            }`}
+            onClick={() => fetchFilteredTimings("Pursuing")}
+          >
+            Pursuing
+          </button>
+          <button
+            className={`p-2 text-white rounded-md ${
+              selectedStatus === "Completed" ? "bg-yellow-700" : "bg-yellow-500"
+            }`}
+            onClick={() => fetchFilteredTimings("Completed")}
+          >
+            Completed
+          </button>
         </div>
 
-        <div className="w-full overflow-x-auto">
-          <table className="min-w-[60px] w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
-            <thead>
-              <tr className="bg-blue-500 text-white text-sm md:text-base">
-                <th className="p-3 text-left">Batch Timing</th>
-                <th className="p-3 text-center">Course</th>
-                <th className="p-3 text-center">Subject</th>
-                {(selectedStatus === "Pursuing" || selectedStatus === "Completed") && (
-                  <th className="p-3 text-center">Action</th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {batchTimings.length > 0 ? (
-                batchTimings.map((batch, index) => (
-                  <tr key={index} className="border-b hover:bg-gray-100 text-sm md:text-base">
-                    <td className="p-3">{batch.batch_time || "N/A"}</td>
-                    <td className="p-3 text-center">{batch.course}</td>
-                    <td className="p-3 text-center">{batch.subject || "N/A"}</td>
-                    {(selectedStatus === "Pursuing" || selectedStatus === "Completed") && (
-                      <td className="p-3 text-center">
-                        <button
-                          onClick={() => handleViewAttendance(batch.batch_time)}
-                          className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                        >
-                          View
-                        </button>
-                      </td>
-                    )}
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={selectedStatus === "Pursuing" || selectedStatus === "Completed" ? "4" : "3"} className="text-center text-gray-500 py-4">
-                    No data found.
-                  </td>
+        {/* Batch List */}
+        <div className="w-full max-w-4xl bg-white shadow-lg p-5 rounded-lg">
+          <h2 className="text-lg font-bold text-gray-700 mb-3">
+            {selectedStatus} Batches
+          </h2>
+          {batchTimings.length > 0 ? (
+            <table className="w-full border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border p-2">Batch Time</th>
+                  <th className="border p-2">Course</th>
+                  <th className="border p-2">Subject</th>
+                  <th className="border p-2">Faculty</th>
+                  <th className="border p-2">Start - End Date</th>
+                  <th className="border p-2">Actions</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {batchTimings.map((batch, index) => (
+                  <tr key={index} className="border hover:bg-gray-50">
+                    <td className="p-2 text-center">{batch.batch_time || "N/A"}</td>
+                    <td className="p-2 text-center">{batch.course || "N/A"}</td>
+                    <td className="p-2 text-center">{batch.subject || "N/A"}</td>
+                    <td className="p-2 text-center">{batch.faculty || "N/A"}</td>
+                    <td className="p-2 text-center">
+                      {batch.startdate || "N/A"} to {batch.endate || "N/A"}
+                    </td>
+                    <td className="p-2 text-center">
+                      <button
+                        className="bg-blue-600 text-white px-3 py-1 rounded-md"
+                        onClick={() =>
+                          handleViewAttendance(batch.batch_time  || "N/A", batch.subject  || "N/A")
+                        }
+                      >
+                        View Attendance
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-gray-500 text-center">No batches found</p>
+          )}
         </div>
 
         <Footer />

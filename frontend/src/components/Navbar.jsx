@@ -7,7 +7,7 @@ import Logo from "./Logo";
 
 function Navbar() {
   const [user, setUser] = useState({ name: "", branch: "", course: "" ,photo:""});
-  
+    
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {

@@ -12,7 +12,7 @@ router.get("/get-timings", authenticateJWT, getBatchTimetable);
 router.get("/filtered-batch-timings", authenticateJWT, getFilteredBatchTimings);
 router.post("/logout", logout);
 router.get("/fee-details", authenticateJWT, getFeeDetails);
-router.get("course-details", authenticateJWT, getCourse);
+router.get("/course-details", authenticateJWT, getCourse);
 router.post('/update-profile', authenticateJWT, upload.single('photo'), updateProfile)
 router.post("/notes/upload",authenticateJWT, upload.single("file"), uploadNote);
 router.get("/notes/list", getNotes);

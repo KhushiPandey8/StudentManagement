@@ -2,7 +2,6 @@ import db from '../utils/db.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import multer from 'multer';
-// import upload from '../utils/multer.js'; // Separate multer configuration
 
 dotenv.config();
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
@@ -77,34 +76,35 @@ export const authenticateJWT = (req, res, next) => {
   });
 };
 export const getBatch = (req, res) => {
-  const { name_contactid } = req.user; 
+  // const { name_contactid } = req.user; 
 
-  if (!name_contactid) {
-      return res.status(400).json({ message: "User not authenticated" });
-  }
+  // if (!name_contactid) {
+  //     return res.status(400).json({ message: "User not authenticated" });
+  // }
 
-  const query = `
-      SELECT DISTINCT a.batchtime, a.Subject, a.course 
-      FROM attendence a
-      JOIN faculty_student fs ON fs.nameid = a.name
-      WHERE fs.name = ?;
-  `;
+  // const query = `
+  //     SELECT a.batchtime, a.Subject, a.course 
+  //     FROM attendence a
+  //     JOIN faculty_student fs ON fs.nameid = a.name
+  //     WHERE fs.name = ?;
+  // `;
 
-  db.query(query, [name_contactid], (err, results) => {
-      if (err) {
-          console.error("Error fetching batch timings:", err);
-          return res.status(500).json({ message: "Database error" });
-      }
-      res.json(results);
-  });
+  // db.query(query, [name_contactid], (err, results) => {
+  //     if (err) {
+  //         console.error("Error fetching batch timings:", err);
+  //         return res.status(500).json({ message: "Database error" });
+  //     }
+  //     res.json(results);
+  // });
 };
 
 
 export const getFilteredBatchTimings = (req, res) => {
   const { status } = req.query;
   const { name_contactid } = req.user;
-  console.log("Received Name ID:", name_contactid);
-  console.log("Received Status:", status);
+
+  // console.log("Received Name ID:", name_contactid);
+  // console.log("Received Status:", status);
 
   if (!name_contactid) {
       return res.status(400).json({ message: "User not authenticated" });
@@ -119,13 +119,13 @@ export const getFilteredBatchTimings = (req, res) => {
       `;
   } else if (status === "Pursuing") {
       query = `
-          SELECT DISTINCT batch_time, course, subject
+          SELECT  DISTINCT batch_time, faculty, course, subject, startdate, endate
           FROM faculty_student
           WHERE nameid = ? AND status = 'Pursuing';
       `;
   } else if (status === "Completed") {
       query = `
-          SELECT DISTINCT batch_time, course, subject
+          SELECT DISTINCT batch_time, faculty, course, subject, startdate, endate
           FROM faculty_student
           WHERE nameid = ? AND status = 'Completed';
       `;
@@ -162,21 +162,24 @@ export const getBatchTimings = (req, res) => {
 };
 
 export const getBatchTimetable = (req, res) => {
-  const { name_contactid } = req.user; // Get logged-in student details
-
-  if (!name_contactid) {
+  if (!req.user || !req.user.name_contactid) {
     return res.status(400).json({ message: "User not authenticated" });
   }
 
-  const query = "SELECT DISTINCT batchtime, faculty, Subject, course FROM attendence WHERE name = ?";
+  const { name_contactid } = req.user;
+
+  const query = `SELECT DISTINCT batch_time, faculty, course, subject, startdate, enddate 
+                 FROM faculty_student WHERE nameid = ?`;
+  
   db.query(query, [name_contactid], (err, results) => {
     if (err) {
       console.error("Error fetching batch timings:", err);
       return res.status(500).json({ message: "Database error" });
     }
-    res.json(results); // Send full results
+    res.json(results);
   });
 };
+
 
 export const getAttendance = (req, res) => {
   const { batchtime } = req.query;
@@ -187,7 +190,7 @@ export const getAttendance = (req, res) => {
   }
 
   const query = `
-    SELECT DISTINCT a.date, a.topic, a.attendence, a.Subject , a.batchtime
+    SELECT a.date, a.topic, a.attendence, a.Subject , a.batchtime
     FROM attendence a
     JOIN faculty_student fs ON a.batchtime = fs.batch_time AND a.Subject = fs.subject AND a.course = fs.course
     WHERE fs.nameid = ? AND fs.batch_time = ?;
@@ -251,10 +254,7 @@ export const getCourse = (req, res) => {
     return res.status(400).json({ message: "User not authenticated" });
   }
   const query = `
-    SELECT 
-      course, subject, batch_time, status, startdate, endate,nameid
-    FROM faculty_student
-    WHERE nameid = ?`;
+    SELECT DISTINCT course, status FROM faculty_student WHERE nameid = ?`;
 
   db.query(query, [name_contactid], (err, results) => {
     if (err) {
