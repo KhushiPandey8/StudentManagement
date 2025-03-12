@@ -190,7 +190,7 @@ export const getAttendance = (req, res) => {
   }
 
   const query = `
-    SELECT a.date, a.topic, a.attendence, a.Subject , a.batchtime
+    SELECT DISTINCT a.date, a.topic, a.attendence, a.Subject , a.batchtime , fs.faculty, fs.startdate, fs.endate
     FROM attendence a
     JOIN faculty_student fs ON a.batchtime = fs.batch_time AND a.Subject = fs.subject AND a.course = fs.course
     WHERE fs.nameid = ? AND fs.batch_time = ?;
@@ -204,6 +204,33 @@ export const getAttendance = (req, res) => {
     res.json(results);
   });
 };
+
+// export const getAttendance = (req, res) => {
+//   const { batchtime } = req.query;
+//   const { name_contactid } = req.user;
+
+//   if (!batchtime || !name_contactid) {
+//     return res.status(400).json({ message: "Missing batchtime or user info." });
+//   }
+
+//   const query = `
+//     SELECT a.date, a.topic, a.attendence, a.subject, a.batchtime, fs.faculty, fs.startdate, fs.endate
+//     FROM attendence a
+//     JOIN faculty_student fs 
+//     ON a.batchtime = fs.batch_time 
+//     AND a.subject = fs.subject 
+//     AND a.course = fs.course
+//     WHERE fs.nameid = ? AND fs.batch_time = ?;
+//   `;
+
+//   db.query(query, [name_contactid, batchtime], (err, results) => {
+//     if (err) {
+//       console.error("Error fetching attendance:", err);
+//       return res.status(500).json({ message: "Database error" });
+//     }
+//     res.json(results);
+//   });
+// };
 
 // // Get Attendance
 // export const getAttendance = (req, res) => {
@@ -235,7 +262,7 @@ export const getFeeDetails = (req, res) => {
   const query = `
     SELECT 
       Receipt, name, course, Recieve, Dates, ModeOfPayement, 
-      courseFees, Paid, Balance, status, totalfees, courseFees 
+      courseFees, Paid, Balance, status, totalfees, course
     FROM payement 
     WHERE name_contactid = ?`;
 
@@ -248,22 +275,52 @@ export const getFeeDetails = (req, res) => {
   });
 };
 
+// export const getCourse = (req, res) => {
+//   const { name_contactid } = req.user; 
+//   if (!name_contactid) {
+//     return res.status(400).json({ message: "User not authenticated" });
+//   }
+//   const query = `
+//     SELECT DISTINCT course, status FROM faculty_student WHERE nameid = ?`;
+
+//   db.query(query, [name_contactid], (err, results) => {
+//     if (err) {
+//       console.error("Error fetching course details:", err);
+//       return res.status(500).json({ message: "Database error" });
+//     }
+//     res.json(results);
+//   });
+// }
 export const getCourse = (req, res) => {
-  const { name_contactid } = req.user; 
+  const { name_contactid } = req.user;
   if (!name_contactid) {
     return res.status(400).json({ message: "User not authenticated" });
   }
-  const query = `
-    SELECT DISTINCT course, status FROM faculty_student WHERE nameid = ?`;
 
-  db.query(query, [name_contactid], (err, results) => {
+  const query = `
+    SELECT 
+        s.subjectname, 
+        s.coursename AS course, 
+        COALESCE(fs2.status, 'Pending') AS status
+    FROM subject s 
+    JOIN faculty_student fs 
+        ON s.coursename COLLATE utf8mb4_unicode_ci = fs.course COLLATE utf8mb4_unicode_ci
+        AND fs.nameid = ?
+    LEFT JOIN faculty_student fs2 
+        ON s.subjectname COLLATE utf8mb4_unicode_ci = fs2.subject COLLATE utf8mb4_unicode_ci
+        AND fs2.nameid = ?
+  `;
+
+  db.query(query, [name_contactid, name_contactid], (err, results) => {
     if (err) {
       console.error("Error fetching course details:", err);
       return res.status(500).json({ message: "Database error" });
     }
     res.json(results);
   });
-}
+};
+
+
 
 
 export const updateProfile = (req, res) => {

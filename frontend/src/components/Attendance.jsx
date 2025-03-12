@@ -18,6 +18,7 @@ function Attendance() {
       navigate("/login");
       return;
     }
+
     fetch(`http://localhost:3001/attendance?batchtime=${batchtime}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -33,6 +34,17 @@ function Attendance() {
         <h1 className="text-2xl font-bold text-gray-800 mb-4 mt-5">
           Attendance Details
         </h1>
+        <div className="flex flex-wrap justify-evenly items-center my-6 gap-2">
+          <h2 className="font-bold text-lg">Subject:</h2>
+          <p className="mr-5">{attendance?.[0]?.Subject || "N/A"}</p>
+          <h2 className="font-bold text-lg">Faculty:</h2>
+          <p className="mr-5">{attendance?.[0]?.faculty || "N/A"}</p>
+          <h2 className="font-bold text-lg">Start Date:</h2>
+          <p className="mr-5">{attendance?.[0]?.startdate ? new Date(attendance?.[0]?.startdate).toLocaleDateString("en-GB")
+                        : "N/A"}</p>
+          <h2 className="font-bold text-lg">End Date:</h2>
+          <p className="mr-5">{attendance?.[0]?.endate ? new Date(attendance?.[0]?.endate).toLocaleDateString("en-GB") : "N/A"}</p>
+        </div>
 
         {/* Responsive Table */}
         <div className="w-full overflow-x-auto px-4">
@@ -41,20 +53,15 @@ function Attendance() {
               <tr className="bg-gray-100 text-gray-700">
                 <th className="p-3 text-center border">Date</th>
                 <th className="p-3 text-center border">Topic</th>
-                <th className="p-3 text-center border">Subject</th>
                 <th className="p-3 text-center border">Status</th>
               </tr>
             </thead>
             <tbody>
               {attendance.length > 0 ? (
                 attendance.map((record, index) => (
-                  <tr
-                    key={index}
-                    className="border-b hover:bg-gray-100"
-                  >
+                  <tr key={index} className="border-b hover:bg-gray-100">
                     <td className="p-3 text-center border">{record.date}</td>
                     <td className="p-3 text-center border">{record.topic}</td>
-                    <td className="p-3 text-center border">{record.batchtime}</td>
                     <td
                       className={`p-3 text-center font-semibold border ${
                         record.attendence === "Present"
@@ -69,7 +76,7 @@ function Attendance() {
               ) : (
                 <tr>
                   <td
-                    colSpan="4"
+                    colSpan="3"
                     className="text-center text-gray-500 py-4 border"
                   >
                     No attendance records found.

@@ -36,11 +36,10 @@ function Navbar() {
           <nav className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 w-full justify-items-center py-4">
             {[
               { name: "My Batches", icon: images.worksheet, link: "/timetable" },
-              { name: "Attendance", icon: images.attend, link: "/batchtiming" },
-              { name: "Notes", icon: images.notes, link: "/notes" },
               { name: "Fees Details", icon: images.payment, link: "/fee-history" },
+              { name: "Notes", icon: images.notes, link: "/notes" },
               { name: "Exam Reg", icon: images.exam, link: "/exam" },
-              { name: "My Courses", icon: images.learn, link: "/course" },
+              { name: "My Course Status", icon: images.learn, link: "/course" },
               { name: "Result", icon: images.grade, link: "/grade" },
               { name: "Leave App", icon: images.leave, link: "/leave" },
               { name: "Support", icon: images.support, link: "/support" },

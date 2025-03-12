@@ -97,25 +97,49 @@ function Timetable() {
                   <th className="border p-2">Course</th>
                   <th className="border p-2">Subject</th>
                   <th className="border p-2">Faculty</th>
-                  <th className="border p-2">Start - End Date</th>
+                  <th className="border p-2">Start Date</th>
+                  <th className="border p-2">Exp End Date</th>
+                  <th className="border p-2">End Date</th>
                   <th className="border p-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {batchTimings.map((batch, index) => (
                   <tr key={index} className="border hover:bg-gray-50">
-                    <td className="p-2 text-center">{batch.batch_time || "N/A"}</td>
-                    <td className="p-2 text-center">{batch.course || "N/A"}</td>
-                    <td className="p-2 text-center">{batch.subject || "N/A"}</td>
-                    <td className="p-2 text-center">{batch.faculty || "N/A"}</td>
                     <td className="p-2 text-center">
-                      {batch.startdate || "N/A"} to {batch.endate || "N/A"}
+                      {batch.batch_time || "N/A"}
                     </td>
+                    <td className="p-2 text-center">{batch.course || "N/A"}</td>
+                    <td className="p-2 text-center">
+                      {batch.subject || "N/A"}
+                    </td>
+                    <td className="p-2 text-center">
+                      {batch.faculty || "N/A"}
+                    </td>
+                    <td className="p-2 text-center">
+                      {batch.startdate
+                        ? new Date(batch.startdate).toLocaleDateString("en-GB")
+                        : "N/A"}
+                    </td>
+                    <td className="p-2 text-center">
+                      {batch.expectedate
+                        ? new Date(batch.expectedate).toLocaleDateString("en-GB")
+                        : "N/A"}
+                    </td>
+                    <td className="p-2 text-center">
+                      {batch.endate
+                        ? new Date(batch.endate).toLocaleDateString("en-GB")
+                        : "N/A"}
+                    </td>
+
                     <td className="p-2 text-center">
                       <button
                         className="bg-blue-600 text-white px-3 py-1 rounded-md"
                         onClick={() =>
-                          handleViewAttendance(batch.batch_time  || "N/A", batch.subject  || "N/A")
+                          handleViewAttendance(
+                            batch.batch_time || "N/A",
+                            batch.subject || "N/A"
+                          )
                         }
                       >
                         View Attendance
