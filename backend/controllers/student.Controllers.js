@@ -59,10 +59,9 @@ export const logout = (req, res) => {
   });
 };
 
-// JWT authentication middleware
+// JWT authentication middleware   
 export const authenticateJWT = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
-
   if (!token) {
     return res.status(401).json({ message: "Unauthorized: No token provided" });
   }
@@ -302,7 +301,7 @@ export const getCourse = (req, res) => {
         s.subjectname, 
         s.coursename AS course, 
         COALESCE(fs2.status, 'Pending') AS status
-    FROM subject s 
+    FROM subject s
     JOIN faculty_student fs 
         ON s.coursename COLLATE utf8mb4_unicode_ci = fs.course COLLATE utf8mb4_unicode_ci
         AND fs.nameid = ?

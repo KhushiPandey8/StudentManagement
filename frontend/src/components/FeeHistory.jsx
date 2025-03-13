@@ -96,7 +96,8 @@ function FeeHistory() {
                           {fee.Receipt || "N/A"}
                         </td>
                         <td className="border border-gray-500 p-2 text-center">
-                          {fee.Dates || "N/A"}
+                          {fee.Dates  ? new Date(fee.Dates).toLocaleDateString("en-GB")
+                        : "N/A"}
                         </td>
                         <td className="border border-gray-500 p-2 text-center">
                           {fee.courseFees || "N/A"}
