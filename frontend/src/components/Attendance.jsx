@@ -12,42 +12,71 @@ function Attendance() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const batchtime = params.get("batchtime");
+  const Subject = params.get("Subject");
 
   useEffect(() => {
-    if (!user || !token || !batchtime) {
-      navigate("/login");
-      return;
-    }
+    const fetchAttendance = async () => {
+      if (!user || !token || !batchtime || !Subject) {
+        navigate("/login");
+        return;
+      }
 
-    fetch(`http://localhost:3001/attendance?batchtime=${batchtime}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setAttendance(data))
-      .catch((err) => console.error(err));
-  }, [navigate, user, token, batchtime]);
+      console.log("Fetching attendance for:", { batchtime, Subject });
+
+      try {
+        const response = await fetch(
+          `http://localhost:3001/attendance?batchtime=${batchtime}&Subject=${Subject}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch attendance data");
+        }
+
+        const data = await response.json();
+        setAttendance(data);
+        console.log("Attendance Data:", data);
+      } catch (error) {
+        console.error("Error fetching attendance:", error);
+      }
+    };
+
+    fetchAttendance();
+  }, [navigate, user, token, batchtime, Subject]);
 
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 mt-5">
+        <h1 className="text-2xl font-bold text-gray-800 mb-4 mt-5 text-center">
           Attendance Details
         </h1>
-        <div className="flex flex-wrap justify-evenly items-center my-6 gap-2">
+        <div className="w-full flex flex-wrap justify-center md:justify-evenly items-center my-4 gap-3 text-center md:text-left">
           <h2 className="font-bold text-lg">Subject:</h2>
-          <p className="mr-5">{attendance?.[0]?.Subject || "N/A"}</p>
+          <p>{attendance?.[0]?.subject_name || "N/A"}</p>
+
           <h2 className="font-bold text-lg">Faculty:</h2>
-          <p className="mr-5">{attendance?.[0]?.faculty || "N/A"}</p>
-          <h2 className="font-bold text-lg">Start Date:</h2>
-          <p className="mr-5">{attendance?.[0]?.startdate ? new Date(attendance?.[0]?.startdate).toLocaleDateString("en-GB")
-                        : "N/A"}</p>
-          <h2 className="font-bold text-lg">End Date:</h2>
-          <p className="mr-5">{attendance?.[0]?.endate ? new Date(attendance?.[0]?.endate).toLocaleDateString("en-GB") : "N/A"}</p>
+          <p>{attendance?.[0]?.faculty || "N/A"}</p>
+
+          <h2 className="font-bold text-lg md:text-xl">Start Date:</h2>
+          <p className="mr-5 text-gray-700">
+            {attendance?.[0]?.startdate
+              ? new Date(attendance?.[0]?.startdate).toLocaleDateString("en-GB")
+              : "N/A"}
+          </p>
+
+          <h2 className="font-bold text-lg md:text-xl">End Date:</h2>
+          <p className="mr-5 text-gray-700">
+            {attendance?.[0]?.endate
+              ? new Date(attendance?.[0]?.endate).toLocaleDateString("en-GB")
+              : "N/A"}
+          </p>
         </div>
 
         {/* Responsive Table */}
-        <div className="w-full overflow-x-auto px-4">
+        <div className="w-full overflow-x-auto">
           <table className="w-full border-collapse border border-gray-300 text-sm md:text-base">
             <thead>
               <tr className="bg-gray-100 text-gray-700">
@@ -86,7 +115,6 @@ function Attendance() {
             </tbody>
           </table>
         </div>
-
         <Footer />
       </div>
       <Image />

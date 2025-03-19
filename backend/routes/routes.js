@@ -9,7 +9,7 @@ router.get("/attendance", authenticateJWT, getAttendance);
 router.get("/batch-timings", authenticateJWT, getBatchTimings); // Ensure only authenticated users fetch batches
 router.get("/get-batch", authenticateJWT, getBatch);
 router.get("/get-timings", authenticateJWT, getBatchTimetable);
-router.get("/filtered-batch-timings", authenticateJWT, getFilteredBatchTimings);
+router.get("/get-courses", authenticateJWT, getFilteredBatchTimings);
 router.post("/logout", logout);
 router.get("/fee-details", authenticateJWT, getFeeDetails);
 router.get("/course-details", authenticateJWT, getCourse);
