@@ -1,5 +1,5 @@
 import express from "express";
-import { login, getAttendance, authenticateJWT, logout, getBatchTimings,getBatch, getFeeDetails,updateProfile,deleteNote,getBatchTimetable,getCourse,getFilteredBatchTimings} from "../controllers/student.Controllers.js";
+import { login, getAttendance, authenticateJWT, logout, getBatchTimings,getBatch, getFeeDetails,updateProfile,deleteNote,getBatchTimetable,getCourse,getFilteredBatchTimings, getMarks} from "../controllers/student.Controllers.js";
 import { getNotes,uploadNote} from "../controllers/student.Controllers.js";
 import upload from '../utils/multer.js';
 const router = express.Router();
@@ -10,6 +10,7 @@ router.get("/batch-timings", authenticateJWT, getBatchTimings); // Ensure only a
 router.get("/get-batch", authenticateJWT, getBatch);
 router.get("/get-timings", authenticateJWT, getBatchTimetable);
 router.get("/get-courses", authenticateJWT, getFilteredBatchTimings);
+router.get("/get-marks", authenticateJWT, getMarks);
 router.post("/logout", logout);
 router.get("/fee-details", authenticateJWT, getFeeDetails);
 router.get("/course-details", authenticateJWT, getCourse);

@@ -343,6 +343,48 @@ export const getCourse = (req, res) => {
   });
 };
 
+export const getMarks = (req, res) => {
+  const { name_contactid } = req.user;
+  if (!name_contactid) {
+    return res.status(400).json({ message: "User not authenticated" });
+  }
+  
+
+  const query = `
+    SELECT 
+        s.subjectname, 
+        s.coursename AS course, 
+        sm.subject ,
+        sm.exam_date,
+        sm.marks_obtain
+    FROM subject s
+    JOIN faculty_student fs 
+        ON s.coursename COLLATE utf8mb4_unicode_ci = fs.course COLLATE utf8mb4_unicode_ci
+        AND fs.nameid = ?
+    LEFT JOIN student_marks sm 
+        ON s.subjectname COLLATE utf8mb4_unicode_ci = sm.subject COLLATE utf8mb4_unicode_ci
+        AND sm.nameid = ?
+  `;
+
+  db.query(query, [name_contactid, name_contactid], (err, results) => {
+    if (err) {
+      console.error("Error fetching course details:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
+
+    const subjects = results.map((row) => ({
+      subjectname: row.subjectname,
+      course: row.course,
+      status: row.subject ? "Completed" : "Pending",
+      exam_date: row.exam_date || null,
+      marks_obtain: row.marks_obtain || null,
+    }));
+    console.log("Get Marks", results);
+    res.json(subjects);
+  });
+};
+
+
 export const updateProfile = (req, res) => {
   const { name, contact, course, address, branch, password, status, EmailId } =
     req.body;

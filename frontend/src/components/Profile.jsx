@@ -16,7 +16,7 @@ function Profile() {
     return (
       <div className="text-center text-red-500 mt-6">
         No user data available. Please log in.
-      </div>
+      </div>  
     );
   }
 

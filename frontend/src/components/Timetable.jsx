@@ -115,9 +115,10 @@ function Timetable() {
                       <th className="border p-3">Faculty</th>
                       <th className="border p-3">Start Date</th>
                       <th className="border p-3">End Date</th>
+                      <th className="border p-3">Action</th>
                     </>
                   )}
-                  <th className="border p-3">Action</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -139,9 +140,7 @@ function Timetable() {
                           <td className="border p-3">{sub.faculty || "N/A"}</td>
                           <td className="border p-3">{sub.startdate || "N/A"}</td>
                           <td className="border p-3">{sub.endate || "N/A"}</td>
-                        </>
-                      )}
-                      <td className="p-2 text-center">
+                          <td className="p-2 text-center">
                         <button
                           className="bg-blue-600 text-white px-3 py-1 rounded-md"
                           onClick={() => handleViewAttendance(sub.batch_time, sub.subjectname)}
@@ -149,6 +148,9 @@ function Timetable() {
                           View Attendance
                         </button>
                       </td>
+                        </>
+                      )}
+                     
                     </tr>
                   ))
                 )}
