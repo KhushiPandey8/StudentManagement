@@ -46,6 +46,10 @@ function Attendance() {
     fetchAttendance();
   }, [navigate, user, token, batchtime, Subject]);
 
+  const formatDate = (dateString) => {
+    return dateString ? new Date(dateString).toLocaleDateString("en-GB") : "N/A";
+  };
+
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
@@ -61,18 +65,10 @@ function Attendance() {
           <p>{attendance?.[0]?.faculty || "N/A"}</p>
 
           <h2 className="font-bold text-lg md:text-xl">Start Date:</h2>
-          <p className="mr-5 text-gray-700">
-            {attendance?.[0]?.startdate
-              ? new Date(attendance?.[0]?.startdate).toLocaleDateString("en-GB")
-              : "N/A"}
-          </p>
+          <p className="mr-5 text-gray-700">{formatDate(attendance?.[0]?.startdate)}</p>
 
           <h2 className="font-bold text-lg md:text-xl">End Date:</h2>
-          <p className="mr-5 text-gray-700">
-            {attendance?.[0]?.endate
-              ? new Date(attendance?.[0]?.endate).toLocaleDateString("en-GB")
-              : "N/A"}
-          </p>
+          <p className="mr-5 text-gray-700">{formatDate(attendance?.[0]?.enddate)}</p>
         </div>
 
         {/* Responsive Table */}
@@ -89,7 +85,7 @@ function Attendance() {
               {attendance.length > 0 ? (
                 attendance.map((record, index) => (
                   <tr key={index} className="border-b hover:bg-gray-100">
-                    <td className="p-3 text-center border">{record.date}</td>
+                    <td className="p-3 text-center border">{formatDate(record.date)}</td>
                     <td className="p-3 text-center border">{record.topic}</td>
                     <td
                       className={`p-3 text-center font-semibold border ${
