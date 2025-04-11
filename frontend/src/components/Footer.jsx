@@ -10,9 +10,10 @@ function Footer({ setUser }) {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    fetch("http://localhost:3001/logout", { 
+    fetch("http://localhost:8000/api/v1/routes/logout", { 
         method: "POST", 
-        credentials: "include"
+        credentials: "include",
+        withCredentials:true
     })
     .then(response => response.json())
     .then(() => {

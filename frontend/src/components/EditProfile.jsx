@@ -28,7 +28,8 @@ function EditProfile() {
   const [preview, setPreview] = useState(
     user.photo && user.photo.startsWith("http") 
       ? user.photo 
-      : `http://localhost:3001${user.photo || ""}`
+      : `http://localhost:8000/api/v1/routes/${user.photo || ""}`
+      
   );
 
   console.log("Initial user photo:", user.photo);

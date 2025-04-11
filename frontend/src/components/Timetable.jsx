@@ -16,8 +16,9 @@ function Timetable() {
     const fetchCourseDetails = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3001/get-batch", {
+        const response = await axios.get("http://localhost:8000/api/v1/routes/get-batch", {
           headers: { Authorization: `Bearer ${token}` },
+          withCredentials:true
         });
 
         console.log("Fetched Data:", response.data);

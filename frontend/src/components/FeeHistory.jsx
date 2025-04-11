@@ -13,8 +13,9 @@ function FeeHistory() {
     const fetchFeeDetails = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3001/fee-details", {
+        const response = await axios.get("http://localhost:8000/api/v1/routes/fee-details", {
           headers: { Authorization: `Bearer ${token}` },
+          withCredentials:true
         });
         console.log("Fetched Fee Details:", JSON.stringify(response.data, null, 2));
 

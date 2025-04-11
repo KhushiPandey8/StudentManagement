@@ -25,9 +25,10 @@ function Attendance() {
 
       try {
         const response = await fetch(
-          `http://localhost:3001/attendance?batchtime=${batchtime}&Subject=${Subject}`,
+          `http://localhost:8000/api/v1/routes/attendance?batchtime=${batchtime}&Subject=${Subject}`,
           {
             headers: { Authorization: `Bearer ${token}` },
+            withCredentials:true
           }
         );
 

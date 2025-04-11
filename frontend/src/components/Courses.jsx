@@ -18,8 +18,9 @@ function Courses() {
           return;
         }
 
-        const response = await axios.get("http://localhost:3001/course-details", {
+        const response = await axios.get("http://localhost:8000/api/v1/routes/course-details", {
           headers: { Authorization: `Bearer ${token}` },
+          withCredentials:true
         });
 
         setCourses(response.data);

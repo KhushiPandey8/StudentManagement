@@ -24,8 +24,9 @@ function Notes() {
     }
 
     try {
-      const res = await axios.get("http://localhost:3001/notes/list", {
+      const res = await axios.get("http://localhost:8000/notes/list", {
         headers: { Authorization: `Bearer ${token}` },
+        withCredentials:true
       });
 
       setNotes(res.data); 
