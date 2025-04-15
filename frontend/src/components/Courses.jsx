@@ -20,18 +20,26 @@ function Courses() {
 
         const response = await axios.get("https://studentmanagement-anwx.onrender.com/course-details", {
           headers: { Authorization: `Bearer ${token}` },
-          withCredentials:true
+          withCredentials: true
         });
 
-        setCourses(response.data);
+        // ✅ Check if the response data is an array
+        if (Array.isArray(response.data)) {
+          setCourses(response.data);
+        } else {
+          console.error("Invalid data format. Expected an array.");
+          setCourses([]);
+        }
+
       } catch (error) {
         console.error("Error fetching course details", error);
+        setCourses([]);
       }
     };
     fetchCourseDetails();
   }, []);
 
-  const uniqueCourses = [...new Set(courses.map((c) => c.course))];
+  const uniqueCourses = [...new Set((Array.isArray(courses) ? courses : []).map((c) => c.course))];
 
   useEffect(() => {
     if (selectedCourse) {
@@ -93,7 +101,7 @@ const Table = ({ title, subjects }) => {
   const renderPageNumbers = () => {
     let startPage = Math.max(1, currentPage - 2);
     let endPage = Math.min(totalPages, currentPage + 2);
-    
+
     if (currentPage <= 3) {
       startPage = 1;
       endPage = Math.min(5, totalPages);
