@@ -15,18 +15,17 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://studentmanagement-anwx.onrender.com/api/v1/routes/login", {
+      const response = await fetch("https://studentmanagement-anwx.onrender.com/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        withCredentials: true,
+        withCredentials:true,
         body: JSON.stringify({ contact, password }),
       });
-      
 
       const data = await response.json();
 
       if (response.ok) {
-        dispatch(loginSuccess(data)); 
+        dispatch(loginSuccess(data)); // Store user & token in Redux
         navigate("/");
       } else {
         alert(data.message);
