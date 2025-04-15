@@ -1,12 +1,9 @@
 import db from "../utils/db.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import multer from "multer";
-import { log } from "console";
-import { query } from "express";
 
 dotenv.config();
-const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
+const SECRET_KEY = process.env.JWT_SECRET || "mysecretkey";
 
 // Login endpoint
 export const login = (req, res) => {
