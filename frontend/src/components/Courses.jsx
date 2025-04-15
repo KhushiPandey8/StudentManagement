@@ -20,12 +20,12 @@ function Courses() {
 
         const response = await axios.get("https://studentmanagement-anwx.onrender.com/course-details", {
           headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true
+          withCredentials: true,
         });
 
-        // ✅ Check if the response data is an array
-        if (Array.isArray(response.data)) {
-          setCourses(response.data);
+        const data = response.data;
+        if (Array.isArray(data)) {
+          setCourses(data);
         } else {
           console.error("Invalid data format. Expected an array.");
           setCourses([]);
@@ -36,15 +36,21 @@ function Courses() {
         setCourses([]);
       }
     };
+
     fetchCourseDetails();
   }, []);
 
-  const uniqueCourses = [...new Set((Array.isArray(courses) ? courses : []).map((c) => c.course))];
+  // Safe unique course extraction
+  const uniqueCourses = Array.isArray(courses)
+    ? [...new Set(courses.map((c) => c.course).filter(Boolean))]
+    : [];
 
   useEffect(() => {
-    if (selectedCourse) {
+    if (selectedCourse && Array.isArray(courses)) {
       const filteredSubjects = courses.filter((course) => course.course === selectedCourse);
       setSubjects(filteredSubjects.length ? filteredSubjects : []);
+    } else {
+      setSubjects([]);
     }
   }, [selectedCourse, courses]);
 
@@ -66,16 +72,24 @@ function Courses() {
           >
             <option value="">Select a Course</option>
             {uniqueCourses.map((course, index) => (
-              <option key={index} value={course}>{course}</option>
+              <option key={index} value={course}>
+                {course}
+              </option>
             ))}
           </select>
 
           {selectedCourse && (
             <div className="w-full max-w-[800px] px-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto max-h-[500px]">
-                {pendingSubjects.length > 0 && <Table title="Pending Subjects" subjects={pendingSubjects} />}
-                {pursuingSubjects.length > 0 && <Table title="Pursuing Subjects" subjects={pursuingSubjects} />}
-                {completedSubjects.length > 0 && <Table title="Completed Subjects" subjects={completedSubjects} />}
+                {pendingSubjects.length > 0 && (
+                  <Table title="Pending Subjects" subjects={pendingSubjects} />
+                )}
+                {pursuingSubjects.length > 0 && (
+                  <Table title="Pursuing Subjects" subjects={pursuingSubjects} />
+                )}
+                {completedSubjects.length > 0 && (
+                  <Table title="Completed Subjects" subjects={completedSubjects} />
+                )}
               </div>
             </div>
           )}
@@ -90,15 +104,17 @@ function Courses() {
 const Table = ({ title, subjects }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const subjectsPerPage = 5;
-  const totalPages = Math.ceil(subjects.length / subjectsPerPage);
 
-  const indexOfLastSubject = currentPage * subjectsPerPage;
-  const indexOfFirstSubject = indexOfLastSubject - subjectsPerPage;
-  const currentSubjects = subjects.slice(indexOfFirstSubject, indexOfLastSubject);
+  const currentSubjects = Array.isArray(subjects)
+    ? subjects.slice((currentPage - 1) * subjectsPerPage, currentPage * subjectsPerPage)
+    : [];
+
+  const totalPages = Math.ceil((Array.isArray(subjects) ? subjects.length : 0) / subjectsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const renderPageNumbers = () => {
+    const pageNumbers = [];
     let startPage = Math.max(1, currentPage - 2);
     let endPage = Math.min(totalPages, currentPage + 2);
 
@@ -111,7 +127,6 @@ const Table = ({ title, subjects }) => {
       endPage = totalPages;
     }
 
-    const pageNumbers = [];
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
         <button
