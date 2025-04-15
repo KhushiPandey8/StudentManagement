@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin: "https://studentmanagement-anwx.onrender.com", // Update this to your frontend URL in production
+  origin: "https://studentmanagement-anwx.onrender.com", 
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -23,7 +23,8 @@ app.use(cors(corsOptions));
 app.use('/uploads', express.static('uploads'));
 
 // API Routes
-app.use("/api/v1/routes", routes);
+// app.use("/api/v1/routes", routes);
+app.use(routes);
 
 // Serve React Frontend
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
