@@ -28,7 +28,7 @@ function EditProfile() {
   const [preview, setPreview] = useState(
     user.photo && user.photo.startsWith("http") 
       ? user.photo 
-      : `https://studentmanagement-anwx.onrender.com/api/v1/routes/${user.photo || ""}`
+      : `https://studentmanagement-anwx.onrender.com/${user.photo || ""}`
       
   );
 
