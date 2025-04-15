@@ -15,7 +15,7 @@ function Grade() {
           console.error("No authentication token found");
           return;
         }
-        const response = await axios.get("https://studentmanagement-anwx.onrender.com/get-marks", {
+        const response = await axios.get("http://localhost:8000/api/v1/routes/get-marks", {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials:true
         });

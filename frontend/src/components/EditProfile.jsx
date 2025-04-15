@@ -28,7 +28,7 @@ function EditProfile() {
   const [preview, setPreview] = useState(
     user.photo && user.photo.startsWith("http") 
       ? user.photo 
-      : `https://studentmanagement-anwx.onrender.com/${user.photo || ""}`
+      : `https://studentmanagement-anwx.onrender.com/api/v1/routes/${user.photo || ""}`
       
   );
 
@@ -60,7 +60,7 @@ function EditProfile() {
       }
 
       const res = await axios.post(
-        "https://studentmanagement-anwx.onrender.com/update-profile",
+        "https://studentmanagement-anwx.onrender.com/api/v1/routes/update-profile",
         formDataToSend,
         {
           headers: {
@@ -73,7 +73,7 @@ function EditProfile() {
       console.log("Server Response:", res.data);
 
       const updatedPhoto = res.data.photo 
-        ? `https://studentmanagement-anwx.onrender.com/${res.data.photo}` 
+        ? `https://studentmanagement-anwx.onrender.com/api/v1/routes/${res.data.photo}` 
         : preview;
 
       // Dispatch updated user info

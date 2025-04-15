@@ -16,7 +16,7 @@ function Timetable() {
     const fetchCourseDetails = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("https://studentmanagement-anwx.onrender.com/get-batch", {
+        const response = await axios.get("https://studentmanagement-anwx.onrender.comz/get-batch", {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials:true
         });
