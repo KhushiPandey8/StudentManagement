@@ -25,7 +25,7 @@ function Attendance() {
 
       try {
         const response = await fetch(
-          `https://studentmanagement-anwx.onrender.com/api/v1/routes/attendance?batchtime=${batchtime}&Subject=${Subject}`,
+          `https://studentmanagement-anwx.onrender.com/attendance?batchtime=${batchtime}&Subject=${Subject}`,
           {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials:true
