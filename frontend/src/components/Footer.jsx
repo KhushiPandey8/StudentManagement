@@ -10,7 +10,7 @@ function Footer({ setUser }) {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    fetch("https://studentmanagement-anwx.onrender.com/logout", { 
+    fetch("https://studentmanagement-anwx.onrender.com//api/v1/routes/logout", { 
         method: "POST", 
         credentials: "include",
         withCredentials:true
