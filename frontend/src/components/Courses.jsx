@@ -18,7 +18,7 @@ function Courses() {
           return;
         }
 
-        const response = await axios.get("https://studentmanagement-anwx.onrender.com/course-details", {
+        const response = await axios.get("https://studentmanagement-anwx.onrender.com/ap1/v1/route/course-details", {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
