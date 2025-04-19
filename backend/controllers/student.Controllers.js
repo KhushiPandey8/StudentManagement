@@ -16,7 +16,7 @@ export const login = (req, res) => {
   }
 
   const sql =
-    "SELECT id, contact, password, date12,name, branch, course, photo, address, EmailId,status, name_contactid FROM student WHERE contact = ? and password = ?";
+    "SELECT id, contact, password, date12,name, branch, course,  address, EmailId,status, name_contactid FROM student WHERE contact = ? and password = ?";
 
   db.query(sql, [contact, password], (err, result) => {
     if (err) {
@@ -44,9 +44,9 @@ export const login = (req, res) => {
         name_contactid: user.name_contactid,
         branch: user.branch,
         course: user.course,
-        photo: user.photo
-          ? `${req.protocol}://${req.get("host")}${user.photo}`
-          : null,
+        // photo: user.photo
+        //   ? `${req.protocol}://${req.get("host")}${user.photo}`
+        //   : null,
         // Using the raw value from the DB
         password: user.password,
         address: user.address,
