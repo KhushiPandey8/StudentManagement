@@ -24,6 +24,8 @@ export const login = (req, res) => {
       return res.status(500).json({ message: "Database error" });
     }
 
+    console.log("Database result:", result);
+    
     if (result.length === 0) {
       return res.status(401).json({ message: "Invalid Username or Password" });
     }
