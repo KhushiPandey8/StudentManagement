@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import images from "../constant/Icon";
 
-const BackButton = ({ icon, label = "Back", className = "" }) => {
+const Button = ({ icon, label = "Back", className = "" }) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
