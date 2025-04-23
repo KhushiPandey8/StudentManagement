@@ -40,7 +40,6 @@ function Courses() {
     fetchCourseDetails();
   }, []);
 
-  // Safe unique course extraction
   const uniqueCourses = Array.isArray(courses)
     ? [...new Set(courses.map((c) => c.course).filter(Boolean))]
     : [];
@@ -59,14 +58,14 @@ function Courses() {
   const completedSubjects = subjects.filter((sub) => sub.status === "Completed");
 
   return (
-    <div className="h-screen w-screen flex flex-col md:flex-row font-mono bg-gray-50">
-      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
+    <div className="min-h-screen w-full flex flex-col md:flex-row font-mono bg-gray-50">
+      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md">
         <Logo />
-        <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
-          <h1 className="text-2xl text-center font-bold mb-4">My Course Details</h1>
+        <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4 sm:p-6">
+          <h1 className="text-xl sm:text-2xl md:text-3xl text-center font-bold mb-4">My Course Details</h1>
 
           <select
-            className="border p-2 rounded mb-4 w-full max-w-xs"
+            className="border p-2 sm:p-3 rounded mb-4 w-full max-w-xs text-sm sm:text-base"
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
           >
@@ -79,7 +78,7 @@ function Courses() {
           </select>
 
           {selectedCourse && (
-            <div className="w-full max-w-[800px] px-4">
+            <div className="w-full max-w-[800px] px-2 sm:px-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto max-h-[500px]">
                 {pendingSubjects.length > 0 && (
                   <Table title="Pending Subjects" subjects={pendingSubjects} />
@@ -132,7 +131,7 @@ const Table = ({ title, subjects }) => {
         <button
           key={i}
           onClick={() => paginate(i)}
-          className={`px-3 py-1 border rounded ${currentPage === i ? "bg-gray-300" : "bg-white"}`}
+          className={`px-2 py-1 sm:px-3 sm:py-1.5 border rounded text-xs sm:text-sm ${currentPage === i ? "bg-gray-300" : "bg-white"}`}
         >
           {i}
         </button>
@@ -148,24 +147,24 @@ const Table = ({ title, subjects }) => {
   };
 
   return (
-    <div className="bg-white p-4 shadow-md rounded-lg">
-      <h2 className={`text-lg font-bold mb-2 ${titleColors[title] || "text-black"}`}>{title}</h2>
-      <table className="w-full border-collapse border border-gray-300 text-sm md:text-base font-bold">
+    <div className="bg-white p-3 sm:p-4 shadow-md rounded-lg overflow-x-auto">
+      <h2 className={`text-base sm:text-lg font-bold mb-2 ${titleColors[title] || "text-black"}`}>{title}</h2>
+      <table className="w-full border-collapse border border-gray-300 text-xs sm:text-sm md:text-base font-semibold">
         <thead>
           <tr className="bg-gray-200 border border-gray-500">
-            <th className="border border-gray-500 p-3 text-center">Subject</th>
+            <th className="border border-gray-500 p-2 sm:p-3 text-center">Subject</th>
           </tr>
         </thead>
         <tbody>
           {currentSubjects.map((sub, index) => (
             <tr key={index} className="border border-gray-500">
-              <td className="border border-gray-500 p-3 text-center">{sub.subjectname || "N/A"}</td>
+              <td className="border border-gray-500 p-2 sm:p-3 text-center">{sub.subjectname || "N/A"}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className="mt-2 overflow-x-auto flex justify-center gap-2 p-2">
+      <div className="mt-3 flex flex-wrap justify-center gap-1 sm:gap-2">
         {renderPageNumbers()}
       </div>
     </div>
