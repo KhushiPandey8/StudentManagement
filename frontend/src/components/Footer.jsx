@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/store";
+// import Button from './Button';
 import images from "../constant/Icon";
 
 function Footer({ setUser }) { 
@@ -28,6 +29,7 @@ function Footer({ setUser }) {
     <div className="w-full h-14 mt-auto bg-gradient-to-r from-slate-500 to-slate-950 text-white flex justify-center items-center relative">
       <footer className="flex justify-around w-full px-6 relative">
         {[
+          { name: "Back", icon: images.btn, action: () => navigate(-1) },
           { name: "Home", icon: images.home, link: "/" },
           { name: "Notification", icon: images.notify, link: "/" },
           { name: "Logout", icon: images.logout, action: handleLogout },
