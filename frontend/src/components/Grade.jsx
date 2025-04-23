@@ -15,24 +15,29 @@ function Grade() {
           console.error("No authentication token found");
           return;
         }
-        const response = await axios.get("https://studentmanagement-anwx.onrender.com/api/v1/routes/get-marks", {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials:true
-        });
 
-        setCourses(response.data.courses);
-        setSubjects(response.data.subjects);
+        const response = await axios.get(
+          "https://studentmanagement-anwx.onrender.com/api/v1/routes/get-marks",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+          }
+        );
+
+        setCourses(response.data?.courses || []);
+        setSubjects(response.data?.subjects || []);
       } catch (error) {
         console.error("Error fetching course details", error);
       }
     };
+
     fetchCourseDetails();
   }, []);
 
-  const pendingSubjects = subjects.filter(
+  const pendingSubjects = (subjects || []).filter(
     (sub) => sub.course === selectedCourse && sub.status === "Pending"
   );
-  const completedSubjects = subjects.filter(
+  const completedSubjects = (subjects || []).filter(
     (sub) => sub.course === selectedCourse && sub.status === "Completed"
   );
 
@@ -73,12 +78,13 @@ function Grade() {
                     subjects={pendingSubjects}
                   />
                 )}
-                
               </div>
             </div>
           )}
         </div>
+        
       </div>
+      <Image />
     </div>
   );
 }

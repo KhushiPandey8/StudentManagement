@@ -250,28 +250,7 @@ export const getAttendance = (req, res) => {
 // API route
 
 
-// // Get Attendance
-// export const getAttendance = (req, res) => {
-//   const { batchtime } = req.query;
-//   const { name_contactid } = req.user; // ensure logged-in user
 
-//   if (!batchtime || !name_contactid) {
-//     return res.status(400).json({ message: "Missing batchtime or user info." });
-//   }
-
-//   const query = "SELECT date, topic, attendence, Subject FROM attendence WHERE batchtime = ? AND name = ?";
-//   console.log("Executing Query with Parameters:", name_contactid, batchtime);
-//   console.log("SQL Query:", query);
-
-
-//   db.query(query, [batchtime, name_contactid], (err, results) => {
-//     if (err) {
-//       console.error("Error fetching attendance:", err);
-//       return res.status(500).json({ message: "Database error" });
-//     }
-//     res.json(results);
-//   });
-// };
 
 // Get Fee Details
 export const getFeeDetails = (req, res) => {
