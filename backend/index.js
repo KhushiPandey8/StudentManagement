@@ -23,7 +23,7 @@ app.use(cors(corsOptions));
 app.use('/uploads', express.static('uploads'));
 
 // API Routes
-app.use(routes);
+app.use("/api/v1/routes",routes);
 
 // Serve React Frontend
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
