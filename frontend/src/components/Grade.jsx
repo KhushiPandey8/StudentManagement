@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Logo from "./Logo";
+import Image from "./Image";
 
 function Grade() {
   const [courses, setCourses] = useState([]);
