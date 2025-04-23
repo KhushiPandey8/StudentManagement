@@ -18,6 +18,7 @@ import notify from '../assets/icons/notification.png'
 import logout from '../assets/icons/logout.png'
 import attend from '../assets/icons/attend.png'
 import learn from '../assets/icons/course.png'
+import btn from '../assets/icons/btn.png'
 const images = {
     algo,
     exam,
@@ -38,6 +39,7 @@ const images = {
     notify,
     logout,
     attend,
+    btn,
     learn
 
 }
