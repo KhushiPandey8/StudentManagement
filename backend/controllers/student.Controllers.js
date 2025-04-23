@@ -8,7 +8,7 @@ const SECRET_KEY = process.env.JWT_SECRET || "mysecretkey";
 // Login endpoint
 export const login = (req, res) => {
   const { contact, password } = req.body;
-
+  console.log("Login data received:", contact, password);
   if (!contact || !password) {
     return res
       .status(400)
