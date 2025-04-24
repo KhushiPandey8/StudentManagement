@@ -28,21 +28,18 @@ function FeeHistory() {
     fetchFeeDetails();
   }, []);
 
-  // Group by course and calculate total course fees
   const courseGroups = {};
   const courseNamesArr = new Set();
 
   fees.forEach((fee) => {
     const courseName = fee.course || "Unknown Course";
     courseNamesArr.add(courseName);
-
     if (!courseGroups[courseName]) {
       courseGroups[courseName] = {
         courseFees: fee.courseFees || 0,
         payments: [],
       };
     }
-
     courseGroups[courseName].payments.push(fee);
   });
 
@@ -55,7 +52,6 @@ function FeeHistory() {
   const totalPaid = fees.reduce((sum, fee) => sum + (fee.Paid || 0), 0);
   const totalBalance = totalCourseFees - totalPaid;
 
-  // Prepare rendered rows
   const renderedRows = [];
   let runningTotalPaid = 0;
 
@@ -94,33 +90,39 @@ function FeeHistory() {
   });
 
   return (
-    <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
+    <div className="inset-0 min-h-screen w-screen flex flex-col md:flex-row font-mono overflow-x-auto">
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
-          <div className="p-6">
+          <div className="p-4 w-full">
             <h1 className="text-2xl text-center font-bold mb-4">
               Fees Details
             </h1>
-            <div className="flex flex-wrap justify-evenly items-center my-6 gap-2">
-              <div className="flex justify-center items-center w-full">
-                <h2 className="font-bold text-lg">Name:</h2>
-                <p className="mr-5 text-red-500">{user?.name || "N/A"}</p>
+
+            <div className="flex flex-wrap justify-evenly items-center my-6 gap-4">
+              <div className="flex justify-center items-center w-full md:w-auto">
+                <h2 className="font-bold text-lg mr-2">Name:</h2>
+                <p className="text-red-500">{user?.name || "N/A"}</p>
               </div>
-
-              <h2 className="font-bold text-lg">Course Name:</h2>
-              <p className="mr-5">{courseNames || "N/A"}</p>
-
-              <h2 className="font-bold text-lg">Charged Amt:</h2>
-              <p className="mr-5">{totalCourseFees || "N/A"}</p>
-              <h2 className="font-bold text-lg">Balance Amt:</h2>
-              <p className="mr-5">{totalBalance}</p>
-
-              <h2 className="font-bold text-lg">Paid Amt:</h2>
-              <p className="mr-5">{totalPaid || "N/A"}</p>
+              <div className="flex items-center w-full md:w-auto">
+                <h2 className="font-bold text-lg mr-2">Course Name:</h2>
+                <p>{courseNames || "N/A"}</p>
+              </div>
+              <div className="flex items-center w-full md:w-auto">
+                <h2 className="font-bold text-lg mr-2">Charged Amt:</h2>
+                <p>{totalCourseFees || "N/A"}</p>
+              </div>
+              <div className="flex items-center w-full md:w-auto">
+                <h2 className="font-bold text-lg mr-2">Balance Amt:</h2>
+                <p>{totalBalance}</p>
+              </div>
+              <div className="flex items-center w-full md:w-auto">
+                <h2 className="font-bold text-lg mr-2">Paid Amt:</h2>
+                <p>{totalPaid || "N/A"}</p>
+              </div>
             </div>
 
-            <div className="w-full overflow-x-auto overflow-y-auto">
+            <div className="w-full overflow-x-auto">
               <table className="min-w-[1000px] w-full border-collapse border border-gray-500">
                 <thead>
                   <tr className="bg-gray-200 border border-gray-500">
