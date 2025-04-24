@@ -59,10 +59,10 @@ function Courses() {
 
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
-    <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
-      <Logo />
-      <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
-        <h1 className="text-2xl text-center font-bold mb-4">My Course Details</h1>
+      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
+        <Logo />
+        <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
+          <h1 className="text-2xl text-center font-bold mb-4">My Course Details</h1>
 
           <select
             className="border p-2 sm:p-3 rounded mb-4 w-full max-w-xs text-sm sm:text-base"
@@ -78,8 +78,8 @@ function Courses() {
           </select>
 
           {selectedCourse && (
-            <div className="w-full max-w-[800px] px-2 sm:px-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto max-h-[500px]">
+            <div className="w-full max-w-screen-lg px-2 sm:px-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
                 {pendingSubjects.length > 0 && (
                   <Table title="Pending Subjects" subjects={pendingSubjects} />
                 )}
@@ -147,24 +147,26 @@ const Table = ({ title, subjects }) => {
   };
 
   return (
-    <div className="bg-white p-3 sm:p-4 shadow-md rounded-lg overflow-x-auto">
+    <div className="bg-white w-full p-4 rounded-lg shadow-md overflow-auto max-w-full mx-auto">
       <h2 className={`text-base sm:text-lg font-bold mb-2 ${titleColors[title] || "text-black"}`}>{title}</h2>
-      <table className="w-full border-collapse border border-gray-300 text-xs sm:text-sm md:text-base font-semibold">
-        <thead>
-          <tr className="bg-gray-200 border border-gray-500">
-            <th className="border border-gray-500 p-2 sm:p-3 text-center">Subject</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentSubjects.map((sub, index) => (
-            <tr key={index} className="border border-gray-500">
-              <td className="border border-gray-500 p-2 sm:p-3 text-center">{sub.subjectname || "N/A"}</td>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-300 text-xs sm:text-sm md:text-base font-semibold">
+          <thead>
+            <tr className="bg-gray-200 border border-gray-500">
+              <th className="border border-gray-500 p-2 sm:p-3 text-center">Subject</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentSubjects.map((sub, index) => (
+              <tr key={index} className="border border-gray-500">
+                <td className="border border-gray-500 p-2 sm:p-3 text-center">{sub.subjectname || "N/A"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <div className="mt-3 flex flex-wrap justify-center gap-1 sm:gap-2">
+      <div className="mt-4 flex flex-wrap justify-center gap-2 sm:gap-3">
         {renderPageNumbers()}
       </div>
     </div>
