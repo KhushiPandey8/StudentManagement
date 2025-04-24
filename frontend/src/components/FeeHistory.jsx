@@ -29,13 +29,7 @@ function FeeHistory() {
     fetchFeeDetails();
   }, []);
 
-  // Total fees and payments
-  const totalCourseFees = fees.reduce((sum, fee) => sum + (fee.courseFees || 0), 0);
-  const totalPaid = fees.reduce((sum, fee) => sum + (fee.Paid || 0), 0);
-  const totalBalance = totalCourseFees - totalPaid;
-  const courseNames = [...new Set(fees.map(fee => fee.course || "Unknown Course"))].join(", ");
-
-  // Group fees by course and prepare rows
+  // Group fees by course
   const courseGroups = {};
   fees.forEach((fee) => {
     const courseName = fee.course || "Unknown Course";
@@ -45,10 +39,16 @@ function FeeHistory() {
     courseGroups[courseName].push(fee);
   });
 
+  // Calculate summary values
+  let totalCourseFees = 0;
+  let totalPaid = 0;
+  let totalBalance = 0;
+  let courseNames = [];
+
   let renderedRows = [];
 
   Object.entries(courseGroups).forEach(([courseName, records]) => {
-    let totalCourseFee = records[0]?.courseFees || 0;
+    let totalCourseFee = records[0]?.courseFees || 0; // Use only one-time course fee
     let paidSoFar = 0;
 
     records.forEach((fee, index) => {
@@ -59,33 +59,29 @@ function FeeHistory() {
 
       renderedRows.push(
         <tr key={`${courseName}-${index}`} className="border border-gray-500">
-          <td className="border border-gray-500 p-2 text-center">
-            {fee.Receipt || "N/A"}
-          </td>
+          <td className="border border-gray-500 p-2 text-center">{fee.Receipt || "N/A"}</td>
           <td className="border border-gray-500 p-2 text-center">
             {fee.Dates ? new Date(fee.Dates).toLocaleDateString("en-GB") : "N/A"}
           </td>
-          <td className="border border-gray-500 p-2 text-center">
-            {totalCourseFee}
-          </td>
-          <td className="border border-gray-500 p-2 text-center">
-            {paidThis}
-          </td>
-          <td className="border border-gray-500 p-2 text-center">
-            {balance}
-          </td>
-          <td className="border border-gray-500 p-2 text-center">
-            {fee.ModeOfPayement || "N/A"}
-          </td>
-          <td className="border border-gray-500 p-2 text-center">
-            {fee.Recieve || "N/A"}
-          </td>
+          <td className="border border-gray-500 p-2 text-center">{totalCourseFee}</td>
+          <td className="border border-gray-500 p-2 text-center">{paidThis}</td>
+          <td className="border border-gray-500 p-2 text-center">{balance}</td>
+          <td className="border border-gray-500 p-2 text-center">{fee.ModeOfPayement || "N/A"}</td>
+          <td className="border border-gray-500 p-2 text-center">{fee.Recieve || "N/A"}</td>
           <td className="border border-gray-500 p-2 text-center text-blue-600 font-semibold">
             {remainingBeforeThis}
           </td>
         </tr>
       );
     });
+
+    // Summary values
+    totalCourseFees += totalCourseFee; // Only count the course fee once
+    totalPaid += records[records.length - 1]?.Paid || 0; // Last installment Paid
+    totalBalance += records[records.length - 1]
+      ? totalCourseFee - paidSoFar
+      : 0; // Balance from the last installment
+    courseNames.push(courseName);
   });
 
   return (
@@ -102,7 +98,7 @@ function FeeHistory() {
               </div>
 
               <h2 className="font-bold text-lg">Course Name:</h2>
-              <p className="mr-5">{courseNames || "N/A"}</p>
+              <p className="mr-5">{courseNames.join(", ") || "N/A"}</p>
 
               <h2 className="font-bold text-lg">Charged Amt:</h2>
               <p className="mr-5">{totalCourseFees || "N/A"}</p>
@@ -142,7 +138,7 @@ function FeeHistory() {
               </table>
             </div>
           </div>
-          
+          <Footer />
         </div>
         <Footer />
       </div>
