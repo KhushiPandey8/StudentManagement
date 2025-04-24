@@ -61,92 +61,66 @@ function FeeHistory() {
     const balance = totalCourseFees - runningTotalPaid;
 
     renderedRows.push(
-      <tr key={index} className="border border-gray-500">
-        <td className="border border-gray-500 p-2 text-center">
-          {fee.Receipt || "N/A"}
+      <tr key={index} className="border border-gray-500 text-xs">
+        <td className="border border-gray-500 p-1 text-center">{fee.Receipt || "N/A"}</td>
+        <td className="border border-gray-500 p-1 text-center">
+          {fee.Dates ? new Date(fee.Dates).toLocaleDateString("en-GB") : "N/A"}
         </td>
-        <td className="border border-gray-500 p-2 text-center">
-          {fee.Dates
-            ? new Date(fee.Dates).toLocaleDateString("en-GB")
-            : "N/A"}
-        </td>
-        <td className="border border-gray-500 p-2 text-center">
-          {totalCourseFees}
-        </td>
-        <td className="border border-gray-500 p-2 text-center">
-          {paidThis}
-        </td>
-        <td className="border border-gray-500 p-2 text-center">
-          {balance}
-        </td>
-        <td className="border border-gray-500 p-2 text-center">
-          {fee.ModeOfPayement || "N/A"}
-        </td>
-        <td className="border border-gray-500 p-2 text-center">
-          {fee.Recieve || "N/A"}
-        </td>
+        <td className="border border-gray-500 p-1 text-center">{totalCourseFees}</td>
+        <td className="border border-gray-500 p-1 text-center">{paidThis}</td>
+        <td className="border border-gray-500 p-1 text-center">{balance}</td>
+        <td className="border border-gray-500 p-1 text-center">{fee.ModeOfPayement || "N/A"}</td>
+        <td className="border border-gray-500 p-1 text-center">{fee.Recieve || "N/A"}</td>
       </tr>
     );
   });
 
   return (
-    <div className="inset-0 min-h-screen w-screen flex flex-col md:flex-row font-mono overflow-x-auto">
+    <div className="inset-0 min-h-screen w-screen flex flex-col md:flex-row font-mono text-sm overflow-x-auto">
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
           <div className="p-4 w-full">
-            <h1 className="text-2xl text-center font-bold mb-4">
-              Fees Details
-            </h1>
+            <h1 className="text-xl text-center font-bold mb-4">Fees Details</h1>
 
-            <div className="flex flex-wrap justify-evenly items-center my-6 gap-4">
-              <div className="flex justify-center items-center w-full md:w-auto">
-                <h2 className="font-bold text-lg mr-2">Name:</h2>
-                <p className="text-red-500">{user?.name || "N/A"}</p>
-              </div>
-              <div className="flex items-center w-full md:w-auto">
-                <h2 className="font-bold text-lg mr-2">Course Name:</h2>
-                <p>{courseNames || "N/A"}</p>
-              </div>
-              <div className="flex items-center w-full md:w-auto">
-                <h2 className="font-bold text-lg mr-2">Charged Amt:</h2>
-                <p>{totalCourseFees || "N/A"}</p>
-              </div>
-              <div className="flex items-center w-full md:w-auto">
-                <h2 className="font-bold text-lg mr-2">Balance Amt:</h2>
-                <p>{totalBalance}</p>
-              </div>
-              <div className="flex items-center w-full md:w-auto">
-                <h2 className="font-bold text-lg mr-2">Paid Amt:</h2>
-                <p>{totalPaid || "N/A"}</p>
-              </div>
-            </div>
+            {/* Left-side information table */}
+            <table className="w-full mb-4 border border-gray-400 text-xs">
+              <tbody>
+                <tr className="border border-gray-400">
+                  <td className="font-bold p-2 border w-1/3">Name</td>
+                  <td className="p-2 border text-red-500">{user?.name || "N/A"}</td>
+                </tr>
+                <tr className="border border-gray-400">
+                  <td className="font-bold p-2 border">Course Name</td>
+                  <td className="p-2 border">{courseNames || "N/A"}</td>
+                </tr>
+                <tr className="border border-gray-400">
+                  <td className="font-bold p-2 border">Charged Amount</td>
+                  <td className="p-2 border">{totalCourseFees || "N/A"}</td>
+                </tr>
+                <tr className="border border-gray-400">
+                  <td className="font-bold p-2 border">Paid Amount</td>
+                  <td className="p-2 border">{totalPaid || "N/A"}</td>
+                </tr>
+                <tr className="border border-gray-400">
+                  <td className="font-bold p-2 border">Balance Amount</td>
+                  <td className="p-2 border">{totalBalance}</td>
+                </tr>
+              </tbody>
+            </table>
 
+            {/* Table for fee transactions */}
             <div className="w-full overflow-x-auto">
-              <table className="min-w-[1000px] w-full border-collapse border border-gray-500">
+              <table className="min-w-[1000px] w-full border-collapse border border-gray-500 text-xs">
                 <thead>
                   <tr className="bg-gray-200 border border-gray-500">
-                    <th className="border border-gray-500 p-2 text-center">
-                      Receipt
-                    </th>
-                    <th className="border border-gray-500 p-2 text-center">
-                      Date
-                    </th>
-                    <th className="border border-gray-500 p-2 text-center">
-                      Course Fees
-                    </th>
-                    <th className="border border-gray-500 p-2 text-center">
-                      Fees Paid
-                    </th>
-                    <th className="border border-gray-500 p-2 text-center">
-                      Balance
-                    </th>
-                    <th className="border border-gray-500 p-2 text-center">
-                      Mode of Payment
-                    </th>
-                    <th className="border border-gray-500 p-2 text-center">
-                      Received
-                    </th>
+                    <th className="border border-gray-500 p-1 text-center">Receipt</th>
+                    <th className="border border-gray-500 p-1 text-center">Date</th>
+                    <th className="border border-gray-500 p-1 text-center">Course Fees</th>
+                    <th className="border border-gray-500 p-1 text-center">Fees Paid</th>
+                    <th className="border border-gray-500 p-1 text-center">Balance</th>
+                    <th className="border border-gray-500 p-1 text-center">Mode of Payment</th>
+                    <th className="border border-gray-500 p-1 text-center">Received</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -154,10 +128,7 @@ function FeeHistory() {
                     renderedRows
                   ) : (
                     <tr>
-                      <td
-                        colSpan="7"
-                        className="border border-gray-500 p-2 text-center"
-                      >
+                      <td colSpan="7" className="border border-gray-500 p-2 text-center">
                         No fee details available
                       </td>
                     </tr>
