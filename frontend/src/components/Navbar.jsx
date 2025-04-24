@@ -55,8 +55,8 @@ function Navbar() {
                 <img
                   src={item.icon}
                   alt={item.name}
-                  className="h-14 w-14 md:h-18 md:w-18 lg:h-20 lg:w-20 shadow-lg rounded-lg p-2 bg-gray-100 
-                    hover:bg-gray-200 transition-transform duration-200 ease-in-out transform 
+                  className="h-14 w-14 md:h-18 md:w-18 lg:h-20 lg:w-20 shadow-lg rounded-lg p-2 bg-gray-300 
+                    hover:bg-gray-400 transition-transform duration-200 ease-in-out transform 
                     hover:scale-110 focus:scale-110 active:scale-90"
                 />
                 <span className="font-semibold text-xm md:text-xm md:text-xm font-mono mt-1 md:mt-2 text-gray-700">
