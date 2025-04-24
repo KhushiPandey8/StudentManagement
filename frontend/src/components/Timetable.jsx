@@ -55,8 +55,8 @@ function Timetable() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row font-mono text-sm">
-      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md">
+    <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
+      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
         <div className="mt-3 flex-1 overflow-y-auto w-full flex flex-col items-center p-3">
           <h1 className="text-xl md:text-2xl text-center font-semibold mb-3">My Course Details</h1>
