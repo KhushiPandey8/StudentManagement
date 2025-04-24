@@ -112,35 +112,36 @@ function FeeHistory() {
               <p className="mr-5">{totalBalance}</p>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border border-gray-500">
-                <thead>
-                  <tr className="bg-gray-200 border border-gray-500">
-                    <th className="border border-gray-500 p-2 text-center">Receipt</th>
-                    <th className="border border-gray-500 p-2 text-center">Date</th>
-                    <th className="border border-gray-500 p-2 text-center">Course Fees</th>
-                    <th className="border border-gray-500 p-2 text-center">Fees Paid</th>
-                    <th className="border border-gray-500 p-2 text-center">Fees Balance</th>
-                    <th className="border border-gray-500 p-2 text-center">Mode of Payment</th>
-                    <th className="border border-gray-500 p-2 text-center">Received</th>
-                    <th className="border border-gray-500 p-2 text-center">Remaining Total Amt</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {renderedRows.length > 0 ? (
-                    renderedRows
-                  ) : (
-                    <tr>
-                      <td colSpan="8" className="border border-gray-500 p-2 text-center">
-                        No fee details available
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <div className="overflow-x-scroll md:overflow-x-auto w-full">
+  <table className="min-w-[800px] w-full border-collapse border border-gray-500">
+    <thead>
+      <tr className="bg-gray-200 border border-gray-500">
+        <th className="border border-gray-500 p-2 text-center">Receipt</th>
+        <th className="border border-gray-500 p-2 text-center">Date</th>
+        <th className="border border-gray-500 p-2 text-center">Course Fees</th>
+        <th className="border border-gray-500 p-2 text-center">Fees Paid</th>
+        <th className="border border-gray-500 p-2 text-center">Fees Balance</th>
+        <th className="border border-gray-500 p-2 text-center">Mode of Payment</th>
+        <th className="border border-gray-500 p-2 text-center">Received</th>
+        <th className="border border-gray-500 p-2 text-center">Remaining Total Amt</th>
+      </tr>
+    </thead>
+    <tbody>
+      {renderedRows.length > 0 ? (
+        renderedRows
+      ) : (
+        <tr>
+          <td colSpan="8" className="border border-gray-500 p-2 text-center">
+            No fee details available
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</div>
+
           </div>
-          <Footer />
+         
         </div>
         <Footer />
       </div>
@@ -150,4 +151,3 @@ function FeeHistory() {
 }
 
 export default FeeHistory;
-  
