@@ -142,7 +142,7 @@ function FeeHistory() {
               </table>
             </div>
           </div>
-          <Footer />
+          
         </div>
         <Footer />
       </div>
