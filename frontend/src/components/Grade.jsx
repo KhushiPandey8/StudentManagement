@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Logo from "./Logo";
 import Image from "./Image";
+import Footer from "./Footer";
 
 function Grade() {
   const [courses, setCourses] = useState([]);
@@ -48,7 +49,7 @@ function Grade() {
         <Logo />
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
           <h1 className="text-2xl text-center font-bold mb-4">
-            My Course Details
+            My Grades
           </h1>
 
           <select
@@ -83,7 +84,7 @@ function Grade() {
             </div>
           )}
         </div>
-        
+        <Footer/>
       </div>
       <Image />
     </div>
