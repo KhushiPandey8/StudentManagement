@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "./Image";
 import Footer from "./Footer";
@@ -18,7 +18,7 @@ function Timetable() {
         const token = localStorage.getItem("token");
         const response = await axios.get("https://studentmanagement-anwx.onrender.com/api/v1/routes/get-batch", {
           headers: { Authorization: `Bearer ${token}` },
-          withCredentials:true
+          withCredentials: true,
         });
 
         console.log("Fetched Data:", response.data);
@@ -46,13 +46,12 @@ function Timetable() {
     setFilteredSubjects([]);
   };
 
-  const handleViewAttendance = (batchTime, Subject) => {
-    // Ensure encoding of query parameters to prevent errors
+  const handleViewAttendance = (batchTime, subject) => {
     const encodedBatchTime = encodeURIComponent(batchTime);
-    const encodedSubject = encodeURIComponent(Subject);
+    const encodedSubject = encodeURIComponent(subject);
 
     navigate(`/attend?batchtime=${encodedBatchTime}&Subject=${encodedSubject}`);
-    console.log(`Viewing attendance at ${batchTime} - ${Subject}`);
+    console.log(`Viewing attendance at ${batchTime} - ${subject}`);
   };
 
   return (
@@ -108,7 +107,7 @@ function Timetable() {
           <div className="w-[1000px] overflow-x-auto">
             <table className="w-full border-collapse border border-gray-300">
               <thead>
-                <tr className="bg-gray-200">
+                <tr className="bg-gray-200 text-center">
                   <th className="border p-3">Subject Name</th>
                   {selectedStatus !== "Pending" && (
                     <>
@@ -119,7 +118,6 @@ function Timetable() {
                       <th className="border p-3">Action</th>
                     </>
                   )}
-                  
                 </tr>
               </thead>
               <tbody>
@@ -134,24 +132,25 @@ function Timetable() {
                 ) : (
                   filteredSubjects.map((sub, index) => (
                     <tr key={index} className="text-center">
-                      <td className="border p-3">{sub.subjectname}</td>
+                      <td className="border p-3">{sub.subjectname || "N/A"}</td>
                       {selectedStatus !== "Pending" && (
                         <>
                           <td className="border p-3">{sub.batch_time || "N/A"}</td>
                           <td className="border p-3">{sub.faculty || "N/A"}</td>
                           <td className="border p-3">{sub.startdate || "N/A"}</td>
-                          <td className="border p-3">{sub.endate || "N/A"}</td>
+                          <td className="border p-3">{sub.enddate || "N/A"}</td>
                           <td className="p-2 text-center">
-                        <button
-                          className="bg-blue-600 text-white px-3 py-1 rounded-md"
-                          onClick={() => handleViewAttendance(sub.batch_time, sub.subjectname)}
-                        >
-                          View Attendance
-                        </button>
-                      </td>
+                            <button
+                              className="bg-blue-600 text-white px-3 py-1 rounded-md"
+                              onClick={() =>
+                                handleViewAttendance(sub.batch_time, sub.subjectname)
+                              }
+                            >
+                              View Attendance
+                            </button>
+                          </td>
                         </>
                       )}
-                     
                     </tr>
                   ))
                 )}

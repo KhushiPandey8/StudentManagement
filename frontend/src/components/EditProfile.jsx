@@ -78,9 +78,7 @@ function EditProfile() {
                 alt="Profile"
                 className="w-28 h-28 md:w-32 md:h-32 object-cover rounded-full border-4 border-blue-500 shadow-lg"
               />
-              <p className="text-sm text-gray-600 mt-2 italic">
-                Profile photo cannot be changed
-              </p>
+              
             </div>
 
             <input className="w-full p-3 mb-3 border rounded-md" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" />
