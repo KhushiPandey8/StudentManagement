@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import Footer from "./Footer";
 import Image from "./Image";
 import "../App.css";
+import images from "../constant/Icon";
 
 function Profile() {
   const user = useSelector((state) => state.auth.user);
@@ -16,7 +17,7 @@ function Profile() {
     return (
       <div className="text-center text-red-500 mt-6">
         No user data available. Please log in.
-      </div>  
+      </div>
     );
   }
 
@@ -31,8 +32,8 @@ function Profile() {
           <div className="relative mt-4">
             <img
               src={
-                user.photo
-                  ? user.photo
+                images.girl
+                  ? images.girl
                   : "https://dummyimage.com/150x150/cccccc/ffffff"
               }
               onError={(e) =>
@@ -44,6 +45,7 @@ function Profile() {
             <button
               onClick={() => navigate("/edit")}
               className="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full shadow-lg cursor-pointer"
+              title="Edit Profile (Photo Locked)"
             >
               ✏️
             </button>
@@ -67,8 +69,10 @@ function Profile() {
                 <strong>Email:</strong> {user.EmailId || "Not Provided"}
               </p>
               <p className="text-base md:text-lg text-gray-700 flex items-center">
-                <strong>Password:</strong> 
-                <span className="ml-2">{showPassword ? user.password : "●●●●●●"}</span>
+                <strong>Password:</strong>
+                <span className="ml-2">
+                  {showPassword ? user.password : "●●●●●●"}
+                </span>
                 <button
                   onClick={() => setShowPassword(!showPassword)}
                   className="ml-2 text-gray-600 hover:text-gray-800 focus:outline-none"
@@ -81,11 +85,13 @@ function Profile() {
               <p className="text-base md:text-lg text-gray-700">
                 <strong>Branch:</strong> {user.branch || "Not Provided"}
               </p>
-              <p className={`text-base md:text-lg text-gray-700 `}>
+              <p className="text-base md:text-lg text-gray-700">
                 <strong>Status:</strong>{" "}
                 <span
                   className={`${
-                    user.status === "Active" ? "text-red-600" : "text-green-600"
+                    user.status === "Active"
+                      ? "text-green-600"
+                      : "text-red-600"
                   }`}
                 >
                   {user.status || "Not Provided"}

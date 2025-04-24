@@ -79,7 +79,7 @@ function FeeHistory() {
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
-        <Logo />
+        
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
           <div className="p-4 w-full">
             <h1 className="text-xl text-center font-bold mb-4">Fees Details</h1>
