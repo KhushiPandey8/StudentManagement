@@ -44,7 +44,7 @@ const images = {
     btn,
     learn,
     girl,
-    boy
+    
 
 }
 export default images;
