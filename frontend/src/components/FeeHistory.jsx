@@ -123,7 +123,7 @@ function FeeHistory() {
               <p className="mr-5">{totalPaid || "N/A"}</p>
             </div>
 
-            <div className="w-full overflow-x-auto">
+            <div className="w-full overflow-x-auto overflow-y-auto">
               <table className="min-w-[1000px] w-full border-collapse border border-gray-500">
                 <thead>
                   <tr className="bg-gray-200 border border-gray-500">
