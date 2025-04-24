@@ -44,10 +44,10 @@ function Footer({ setUser }) {
           >
             {item.link ? (
               <Link to={item.link}>
-                <img src={item.icon} alt={item.name} className="h-6 w-6 md:h-8 md:w-8 shadow-md rounded-lg p-1 bg-gray-100 hover:bg-gray-200 transition-transform duration-200 transform hover:scale-110" />
+                <img src={item.icon} alt={item.name} className="h-7 w-7 md:h-9 md:w-9 shadow-md rounded-lg p-1 bg-gray-100 hover:bg-gray-200 transition-transform duration-200 transform hover:scale-110" />
               </Link>
             ) : (
-              <img src={item.icon} alt={item.name} className="h-6 w-6 md:h-8 md:w-8 shadow-md rounded-lg p-1 bg-gray-100 hover:bg-gray-200 transition-transform duration-200 transform hover:scale-110" />
+              <img src={item.icon} alt={item.name} className="h-7 w-7 md:h-9 md:w-9 shadow-md rounded-lg p-1 bg-gray-100 hover:bg-gray-200 transition-transform duration-200 transform hover:scale-110" />
             )}
             {hovered === index && (
               <div className="absolute -top-6 bg-gray-800 text-white text-xs rounded-md px-2 py-1 shadow-md">{item.name}</div>

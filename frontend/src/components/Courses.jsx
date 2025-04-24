@@ -58,11 +58,11 @@ function Courses() {
   const completedSubjects = subjects.filter((sub) => sub.status === "Completed");
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row font-mono bg-gray-50">
-      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md">
-        <Logo />
-        <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4 sm:p-6">
-          <h1 className="text-xl sm:text-2xl md:text-3xl text-center font-bold mb-4">My Course Details</h1>
+    <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
+    <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
+      <Logo />
+      <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
+        <h1 className="text-2xl text-center font-bold mb-4">My Course Details</h1>
 
           <select
             className="border p-2 sm:p-3 rounded mb-4 w-full max-w-xs text-sm sm:text-base"
