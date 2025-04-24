@@ -20,7 +20,6 @@ function FeeHistory() {
             withCredentials: true,
           }
         );
-        console.log("Fetched Fee Details:", JSON.stringify(response.data, null, 2));
         setFees(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Error fetching fee details", error);
@@ -29,7 +28,7 @@ function FeeHistory() {
     fetchFeeDetails();
   }, []);
 
-  // Group fees by course
+  // Group by course
   const courseGroups = {};
   fees.forEach((fee) => {
     const courseName = fee.course || "Unknown Course";
@@ -39,16 +38,27 @@ function FeeHistory() {
     courseGroups[courseName].push(fee);
   });
 
-  // Calculate summary values
+  // Calculate totals for the heading
   let totalCourseFees = 0;
   let totalPaid = 0;
-  let totalBalance = 0;
-  let courseNames = [];
+  let courseNamesArr = [];
 
-  let renderedRows = [];
+  for (const [course, records] of Object.entries(courseGroups)) {
+    const courseFee = records[0]?.courseFees || 0;
+    const paid = records.reduce((sum, r) => sum + (r.Paid || 0), 0);
+    totalCourseFees += courseFee;
+    totalPaid += paid;
+    courseNamesArr.push(course);
+  }
+
+  const totalBalance = totalCourseFees - totalPaid;
+  const courseNames = courseNamesArr.join(", ");
+
+  // Prepare rendered rows
+  const renderedRows = [];
 
   Object.entries(courseGroups).forEach(([courseName, records]) => {
-    let totalCourseFee = records[0]?.courseFees || 0; // Use only one-time course fee
+    const totalCourseFee = records[0]?.courseFees || 0;
     let paidSoFar = 0;
 
     records.forEach((fee, index) => {
@@ -74,14 +84,6 @@ function FeeHistory() {
         </tr>
       );
     });
-
-    // Summary values
-    totalCourseFees += totalCourseFee; // Only count the course fee once
-    totalPaid += records[records.length - 1]?.Paid || 0; // Last installment Paid
-    totalBalance += records[records.length - 1]
-      ? totalCourseFee - paidSoFar
-      : 0; // Balance from the last installment
-    courseNames.push(courseName);
   });
 
   return (
@@ -98,7 +100,7 @@ function FeeHistory() {
               </div>
 
               <h2 className="font-bold text-lg">Course Name:</h2>
-              <p className="mr-5">{courseNames.join(", ") || "N/A"}</p>
+              <p className="mr-5">{courseNames || "N/A"}</p>
 
               <h2 className="font-bold text-lg">Charged Amt:</h2>
               <p className="mr-5">{totalCourseFees || "N/A"}</p>
@@ -148,3 +150,4 @@ function FeeHistory() {
 }
 
 export default FeeHistory;
+  
