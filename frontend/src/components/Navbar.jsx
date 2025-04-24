@@ -28,7 +28,7 @@ function Navbar() {
           <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
             <div className="text-center text-sm md:text-md font-mono font-bold py-4 flex flex-col items-center">
               <img
-                src={user.photo || "N/A"}
+                src={images.girl || "N/A"}
                 alt="Profile Light"
                 className="w-20 h-20 md:w-20 md:h-20 object-cover rounded-full border-4 border-blue-500 shadow-lg"
               />
