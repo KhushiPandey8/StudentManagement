@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "./Image";
 import Footer from "./Footer";
@@ -10,6 +10,8 @@ function Timetable() {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [filteredSubjects, setFilteredSubjects] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const subjectsPerPage = 14;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,6 +54,44 @@ function Timetable() {
     const encodedBatchTime = encodeURIComponent(batchTime);
     const encodedSubject = encodeURIComponent(Subject);
     navigate(`/attend?batchtime=${encodedBatchTime}&Subject=${encodedSubject}`);
+  };
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const totalPages = Math.ceil(filteredSubjects.length / subjectsPerPage);
+  const currentSubjects = filteredSubjects.slice(
+    (currentPage - 1) * subjectsPerPage,
+    currentPage * subjectsPerPage
+  );
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
+
+    if (currentPage <= 3) {
+      startPage = 1;
+      endPage = Math.min(5, totalPages);
+    }
+    if (currentPage >= totalPages - 2) {
+      startPage = Math.max(1, totalPages - 4);
+      endPage = totalPages;
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => paginate(i)}
+          className={`px-2 py-1 sm:px-3 sm:py-1.5 border rounded text-xs sm:text-sm ${
+            currentPage === i ? "bg-gray-300" : "bg-white"
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
   };
 
   return (
@@ -121,7 +161,7 @@ function Timetable() {
                 </tr>
               </thead>
               <tbody>
-                {filteredSubjects.length === 0 ? (
+                {currentSubjects.length === 0 ? (
                   <tr>
                     <td
                       colSpan={selectedStatus !== "Pending" ? 6 : 1}
@@ -133,7 +173,7 @@ function Timetable() {
                     </td>
                   </tr>
                 ) : (
-                  filteredSubjects.map((sub, index) => (
+                  currentSubjects.map((sub, index) => (
                     <tr key={index} className="text-center">
                       <td className="border p-2">{sub.subjectname}</td>
                       {selectedStatus !== "Pending" && (
@@ -159,6 +199,11 @@ function Timetable() {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Pagination */}
+          <div className="mt-4 flex flex-wrap justify-center gap-2 sm:gap-3">
+            {renderPageNumbers()}
           </div>
         </div>
         <Footer />

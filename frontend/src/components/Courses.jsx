@@ -30,7 +30,6 @@ function Courses() {
           console.error("Invalid data format. Expected an array.");
           setCourses([]);
         }
-
       } catch (error) {
         console.error("Error fetching course details", error);
         setCourses([]);
@@ -57,6 +56,12 @@ function Courses() {
   const pursuingSubjects = subjects.filter((sub) => sub.status === "Pursuing");
   const completedSubjects = subjects.filter((sub) => sub.status === "Completed");
 
+  const activeTables = [
+    pendingSubjects.length > 0,
+    pursuingSubjects.length > 0,
+    completedSubjects.length > 0,
+  ].filter(Boolean).length;
+
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
     <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
@@ -78,8 +83,8 @@ function Courses() {
           </select>
 
           {selectedCourse && (
-            <div className="w-full max-w-screen-lg px-2 sm:px-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+            <div className={`w-full max-w-screen-lg px-2 sm:px-4 ${activeTables === 1 ? "flex justify-center" : ""}`}>
+              <div className={`grid ${activeTables === 1 ? "" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"} gap-4 w-full`}>
                 {pendingSubjects.length > 0 && (
                   <Table title="Pending Subjects" subjects={pendingSubjects} />
                 )}
@@ -102,7 +107,7 @@ function Courses() {
 
 const Table = ({ title, subjects }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const subjectsPerPage = 12;
+  const subjectsPerPage = 14; // ✅ Updated to 14 rows per page
 
   const currentSubjects = Array.isArray(subjects)
     ? subjects.slice((currentPage - 1) * subjectsPerPage, currentPage * subjectsPerPage)
