@@ -18,7 +18,7 @@ function Timetable() {
         const token = localStorage.getItem("token");
         const response = await axios.get("https://studentmanagement-anwx.onrender.com/api/v1/routes/get-batch", {
           headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
+          withCredentials: true
         });
 
         console.log("Fetched Data:", response.data);
@@ -109,15 +109,11 @@ function Timetable() {
               <thead>
                 <tr className="bg-gray-200 text-center">
                   <th className="border p-3">Subject Name</th>
-                  {selectedStatus !== "Pending" && (
-                    <>
-                      <th className="border p-3">Batch Time</th>
-                      <th className="border p-3">Faculty</th>
-                      <th className="border p-3">Start Date</th>
-                      <th className="border p-3">End Date</th>
-                      <th className="border p-3">Action</th>
-                    </>
-                  )}
+                  <th className="border p-3">Batch Time</th>
+                  <th className="border p-3">Faculty</th>
+                  <th className="border p-3">Start Date</th>
+                  <th className="border p-3">End Date</th>
+                  <th className="border p-3">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -133,24 +129,32 @@ function Timetable() {
                   filteredSubjects.map((sub, index) => (
                     <tr key={index} className="text-center">
                       <td className="border p-3">{sub.subjectname || "N/A"}</td>
-                      {selectedStatus !== "Pending" && (
-                        <>
-                          <td className="border p-3">{sub.batch_time || "N/A"}</td>
-                          <td className="border p-3">{sub.faculty || "N/A"}</td>
-                          <td className="border p-3">{sub.startdate || "N/A"}</td>
-                          <td className="border p-3">{sub.enddate || "N/A"}</td>
-                          <td className="p-2 text-center">
-                            <button
-                              className="bg-blue-600 text-white px-3 py-1 rounded-md"
-                              onClick={() =>
-                                handleViewAttendance(sub.batch_time, sub.subjectname)
-                              }
-                            >
-                              View Attendance
-                            </button>
-                          </td>
-                        </>
-                      )}
+                      <td className="border p-3">
+                        {selectedStatus === "Pending" ? "N/A" : sub.batch_time || "N/A"}
+                      </td>
+                      <td className="border p-3">
+                        {selectedStatus === "Pending" ? "N/A" : sub.faculty || "N/A"}
+                      </td>
+                      <td className="border p-3">
+                        {selectedStatus === "Pending" ? "N/A" : sub.startdate || "N/A"}
+                      </td>
+                      <td className="border p-3">
+                        {selectedStatus === "Pending" ? "N/A" : sub.endate || "N/A"}
+                      </td>
+                      <td className="border p-3">
+                        {selectedStatus === "Pending" ? (
+                          "N/A"
+                        ) : (
+                          <button
+                            className="bg-blue-600 text-white px-3 py-1 rounded-md"
+                            onClick={() =>
+                              handleViewAttendance(sub.batch_time, sub.subjectname)
+                            }
+                          >
+                            View Attendance
+                          </button>
+                        )}
+                      </td>
                     </tr>
                   ))
                 )}
