@@ -59,7 +59,7 @@ function Navbar() {
                     hover:bg-gray-200 transition-transform duration-200 ease-in-out transform 
                     hover:scale-110 focus:scale-110 active:scale-90"
                 />
-                <span className="font-semibold text-sm md:text-xm md:text-md font-mono mt-1 md:mt-2 text-gray-700">
+                <span className="font-semibold text-xm md:text-xm md:text-xm font-mono mt-1 md:mt-2 text-gray-700">
                   {item.name}
                 </span>
               </Link>
