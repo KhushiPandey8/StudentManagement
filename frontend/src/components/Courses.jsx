@@ -3,6 +3,7 @@ import axios from "axios";
 import Image from "./Image";
 import Footer from "./Footer";
 import Logo from "./Logo";
+import { useSelector } from "react-redux";
 
 function Courses() {
   const user = useSelector((state) => state.auth.user);
