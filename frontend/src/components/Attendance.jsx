@@ -74,7 +74,7 @@ function Attendance() {
 
         {/* Smaller Responsive Table */}
         <div className="w-full overflow-x-auto px-2">
-          <table className="w-full border-collapse border border-gray-300 text-[10px]">
+          <table className="w-full border-collapse border border-gray-300 text-[12px]">
             <thead>
               <tr className="bg-gray-100 text-gray-700">
                 <th className="p-1 text-center border">Date</th>
