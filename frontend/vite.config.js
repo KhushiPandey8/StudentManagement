@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
-        name: 'My Fullstack App',
-        short_name: 'MyApp',
+        name: 'Student Portal',
+        short_name: 'I-tech',
         description: 'Installable React + Node.js App',
         theme_color: '#ffffff',
         background_color: '#ffffff',
