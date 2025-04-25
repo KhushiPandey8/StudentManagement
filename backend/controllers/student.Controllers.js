@@ -25,7 +25,7 @@ export const login = (req, res) => {
     }
 
     console.log("Database result:", result);
-    
+
     if (result.length === 0) {
       return res.status(401).json({ message: "Invalid Username or Password" });
     }
@@ -83,8 +83,8 @@ export const authenticateJWT = (req, res, next) => {
     next();
   });
 };
-export const getBatch = (req, res) => { 
-  const {name_contactid} = req.user; // Extracted from token
+export const getBatch = (req, res) => {
+  const { name_contactid } = req.user; // Extracted from token
 
   const sql = `
     SELECT 
@@ -118,7 +118,6 @@ export const getBatch = (req, res) => {
     res.json(results);
   });
 };
-
 
 export const getFilteredBatchTimings = (req, res) => {
   // const { status } = req.query;
@@ -203,32 +202,36 @@ export const getAttendance = (req, res) => {
   const { name_contactid } = req.user; // Ensure logged-in user
 
   if (!batchtime || !name_contactid || !Subject) {
-    return res.status(400).json({ message: "Missing batchtime, subject, or user info." });
+    return res
+      .status(400)
+      .json({ message: "Missing batchtime, subject, or user info." });
   }
 
   console.log("Received:", { name_contactid, batchtime, Subject });
 
   const query = `
-    SELECT DISTINCT
-      a.date, 
-      a.topic, 
-      a.attendence, 
-      a.Subject AS subject_name, 
-      a.batchtime, 
-      fs.faculty, 
-      fs.startdate, 
-      fs.endate 
-    FROM attendence a
-    JOIN faculty_student fs 
-      ON a.batchtime = fs.batch_time 
-      AND a.Subject = fs.subject
-    WHERE a.batchtime = ? 
-      AND a.name = ? 
-      AND a.Subject = ?;
+    SELECT
+  a.date, 
+  a.topic, 
+  a.attendence, 
+  a.Subject AS subject_name, 
+  a.batchtime, 
+  fs.faculty, 
+  fs.startdate, 
+  fs.endate
+FROM attendence a
+JOIN faculty_student fs 
+  ON a.batchtime = fs.batch_time 
+  AND a.Subject = fs.subject
+WHERE a.batchtime = ? 
+  AND a.name = ? 
+  AND a.Subject = ?
+GROUP BY a.date, a.topic, a.attendence, a.Subject, a.batchtime, fs.faculty, fs.startdate, fs.endate;
+
   `;
 
   console.log("Executing Query:", query);
-  console.log("Query Parameters:", [batchtime, name_contactid, Subject]); 
+  console.log("Query Parameters:", [batchtime, name_contactid, Subject]);
 
   db.query(query, [batchtime, name_contactid, Subject], (err, results) => {
     if (err) {
@@ -246,11 +249,7 @@ export const getAttendance = (req, res) => {
   });
 };
 
-
 // API route
-
-
-
 
 // Get Fee Details
 export const getFeeDetails = (req, res) => {
@@ -275,7 +274,6 @@ export const getFeeDetails = (req, res) => {
     res.json(results);
   });
 };
-
 
 export const getCourse = (req, res) => {
   const { name_contactid } = req.user;
@@ -306,7 +304,6 @@ export const getCourse = (req, res) => {
   });
 };
 
-
 export const getMarks = (req, res) => {
   const { name_contactid } = req.user;
   if (!name_contactid) {
@@ -323,7 +320,7 @@ export const getMarks = (req, res) => {
       return res.status(500).json({ message: "Database error" });
     }
 
-    const courses = courseResults.map(row => row.course);
+    const courses = courseResults.map((row) => row.course);
 
     const marksQuery = `
       SELECT 
@@ -340,31 +337,34 @@ export const getMarks = (req, res) => {
       WHERE fs.nameid = ?;
     `;
 
-    db.query(marksQuery, [name_contactid, name_contactid], (err, marksResults) => {
-      if (err) {
-        console.error("Error fetching marks:", err);
-        return res.status(500).json({ message: "Database error" });
+    db.query(
+      marksQuery,
+      [name_contactid, name_contactid],
+      (err, marksResults) => {
+        if (err) {
+          console.error("Error fetching marks:", err);
+          return res.status(500).json({ message: "Database error" });
+        }
+
+        const subjects = marksResults.map((row) => ({
+          subjectname: row.subjectname,
+          course: row.course,
+          status: row.sm_subject ? "Completed" : "Pending",
+          exam_date: row.exam_date || null,
+          marks_obtain: row.marks_obtain || null,
+          marks_outoff: row.marks_outoff || null,
+        }));
+
+        res.json({ courses, subjects });
       }
-
-      const subjects = marksResults.map(row => ({
-        subjectname: row.subjectname,
-        course: row.course,
-        status: row.sm_subject ? "Completed" : "Pending",
-        exam_date: row.exam_date || null,
-        marks_obtain: row.marks_obtain || null,
-        marks_outoff: row.marks_outoff || null
-      }));
-
-      res.json({ courses, subjects });
-    });
+    );
   });
 };
-
 
 export const updateProfile = (req, res) => {
   const { name, contact, course, address, branch, password, status, EmailId } =
     req.body;
-  
+
   // Constructing the update query dynamically
   let updateFields = [];
   let updateValues = [];
@@ -401,7 +401,7 @@ export const updateProfile = (req, res) => {
     updateFields.push("EmailId = ?");
     updateValues.push(EmailId);
   }
-  
+
   if (updateFields.length === 0) {
     return res.status(400).json({ message: "No fields to update" });
   }

@@ -35,7 +35,15 @@ function Attendance() {
         }
 
         const data = await response.json();
-        setAttendance(data);
+
+        // Filter duplicates based on date and topic
+        const uniqueAttendance = data.filter((value, index, self) =>
+          index === self.findIndex((t) => (
+            t.date === value.date && t.topic === value.topic
+          ))
+        );
+
+        setAttendance(uniqueAttendance);
       } catch (error) {
         console.error("Error fetching attendance:", error);
       }
@@ -49,11 +57,12 @@ function Attendance() {
       ? new Date(dateString).toLocaleDateString("en-GB")
       : "N/A";
   };
-//
+
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
+        <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
         <h1 className="text-md font-semibold text-gray-800 mb-3 mt-4 text-center">
           Attendance Details
         </h1>
@@ -114,7 +123,7 @@ function Attendance() {
             </tbody>
           </table>
         </div>
-
+</div>
         <Footer />
       </div>
       <Image />
