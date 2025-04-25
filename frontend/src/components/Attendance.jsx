@@ -21,8 +21,6 @@ function Attendance() {
         return;
       }
 
-      console.log("Fetching attendance for:", { batchtime, Subject });
-
       try {
         const response = await fetch(
           `https://studentmanagement-anwx.onrender.com/api/v1/routes/attendance?batchtime=${batchtime}&Subject=${Subject}`,
@@ -38,7 +36,6 @@ function Attendance() {
 
         const data = await response.json();
         setAttendance(data);
-        console.log("Attendance Data:", data);
       } catch (error) {
         console.error("Error fetching attendance:", error);
       }
@@ -52,40 +49,37 @@ function Attendance() {
       ? new Date(dateString).toLocaleDateString("en-GB")
       : "N/A";
   };
-
+//
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 mt-5 text-center">
+        <h1 className="text-lg font-semibold text-gray-800 mb-3 mt-4 text-center">
           Attendance Details
         </h1>
-        <div className="w-full flex flex-wrap justify-center md:justify-evenly items-center my-4 gap-3 text-center md:text-left">
-          <h2 className="font-bold text-lg">Subject:</h2>
+
+        <div className="w-full flex flex-wrap justify-center md:justify-evenly items-center my-2 gap-2 text-center md:text-left text-[10px]">
+          <h2 className="font-bold">Subject:</h2>
           <p>{attendance?.[0]?.subject_name || "N/A"}</p>
 
-          <h2 className="font-bold text-lg">Faculty:</h2>
+          <h2 className="font-bold">Faculty:</h2>
           <p>{attendance?.[0]?.faculty || "N/A"}</p>
 
-          <h2 className="font-bold text-lg md:text-xl">Start Date:</h2>
-          <p className="mr-5 text-gray-700">
-            {formatDate(attendance?.[0]?.startdate)}
-          </p>
+          <h2 className="font-bold">Start Date:</h2>
+          <p className="text-gray-700">{formatDate(attendance?.[0]?.startdate)}</p>
 
-          <h2 className="font-bold text-lg md:text-xl">End Date:</h2>
-          <p className="mr-5 text-gray-700">
-            {formatDate(attendance?.[0]?.enddate)}
-          </p>
+          <h2 className="font-bold">End Date:</h2>
+          <p className="text-gray-700">{formatDate(attendance?.[0]?.enddate)}</p>
         </div>
 
-        {/* Responsive Table */}
-        <div className="w-full overflow-x-auto">
+        {/* Smaller Responsive Table */}
+        <div className="w-full overflow-x-auto px-2">
           <table className="w-full border-collapse border border-gray-300 text-[10px]">
             <thead>
-              <tr className="bg-gray-100 text-gray-700 text-[10px]">
-                <th className="p-2 text-center border">Date</th>
-                <th className="p-2 text-center border">Topic</th>
-                <th className="p-2 text-center border">Status</th>
+              <tr className="bg-gray-100 text-gray-700">
+                <th className="p-1 text-center border">Date</th>
+                <th className="p-1 text-center border">Topic</th>
+                <th className="p-1 text-center border">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -93,14 +87,14 @@ function Attendance() {
                 attendance.map((record, index) => (
                   <tr
                     key={index}
-                    className="border-b hover:bg-gray-100 text-[10px]"
+                    className="border-b hover:bg-gray-100"
                   >
-                    <td className="p-2 text-center border">
+                    <td className="p-1 text-center border">
                       {formatDate(record.date)}
                     </td>
-                    <td className="p-2 text-center border">{record.topic}</td>
+                    <td className="p-1 text-center border">{record.topic}</td>
                     <td
-                      className={`p-2 text-center font-semibold border ${
+                      className={`p-1 text-center font-semibold border ${
                         record.attendence === "Present"
                           ? "text-green-600"
                           : "text-red-600"
@@ -112,10 +106,7 @@ function Attendance() {
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="3"
-                    className="text-center text-gray-500 py-2 border"
-                  >
+                  <td colSpan="3" className="text-center text-gray-500 py-1 border">
                     No attendance records found.
                   </td>
                 </tr>
