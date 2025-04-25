@@ -7,6 +7,8 @@ import Footer from "./Footer";
 
 function Attendance() {
   const [attendance, setAttendance] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // To track the current page
+  const [rowsPerPage] = useState(15); // Number of rows to show per page
   const { user, token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,6 +60,17 @@ function Attendance() {
       : "N/A";
   };
 
+  // Calculate the indexes for the current page
+  const indexOfLastRecord = currentPage * rowsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - rowsPerPage;
+  const currentAttendance = attendance.slice(indexOfFirstRecord, indexOfLastRecord);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Calculate total number of pages
+  const totalPages = Math.ceil(attendance.length / rowsPerPage);
+
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
@@ -92,21 +105,14 @@ function Attendance() {
               </tr>
             </thead>
             <tbody>
-              {attendance.length > 0 ? (
-                attendance.map((record, index) => (
-                  <tr
-                    key={index}
-                    className="border-b hover:bg-gray-100"
-                  >
-                    <td className="p-1 text-center border">
-                      {formatDate(record.date)}
-                    </td>
+              {currentAttendance.length > 0 ? (
+                currentAttendance.map((record, index) => (
+                  <tr key={index} className="border-b hover:bg-gray-100">
+                    <td className="p-1 text-center border">{formatDate(record.date)}</td>
                     <td className="p-1 text-center border">{record.topic}</td>
                     <td
                       className={`p-1 text-center font-semibold border ${
-                        record.attendence === "Present"
-                          ? "text-green-600"
-                          : "text-red-600"
+                        record.attendence === "Present" ? "text-green-600" : "text-red-600"
                       }`}
                     >
                       {record.attendence}
@@ -123,7 +129,34 @@ function Attendance() {
             </tbody>
           </table>
         </div>
-</div>
+
+        {/* Pagination Controls */}
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 mx-2 border border-gray-300 rounded-md"
+          >
+            Prev
+          </button>
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => paginate(index + 1)}
+              className={`px-4 py-2 mx-2 border ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'border-gray-300'} rounded-md`}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 mx-2 border border-gray-300 rounded-md"
+          >
+            Next
+          </button>
+        </div>
+         </div>
         <Footer />
       </div>
       <Image />
