@@ -28,7 +28,7 @@ function Attendance() {
           `https://studentmanagement-anwx.onrender.com/api/v1/routes/attendance?batchtime=${batchtime}&Subject=${Subject}`,
           {
             headers: { Authorization: `Bearer ${token}` },
-            withCredentials:true
+            withCredentials: true,
           }
         );
 
@@ -48,7 +48,9 @@ function Attendance() {
   }, [navigate, user, token, batchtime, Subject]);
 
   const formatDate = (dateString) => {
-    return dateString ? new Date(dateString).toLocaleDateString("en-GB") : "N/A";
+    return dateString
+      ? new Date(dateString).toLocaleDateString("en-GB")
+      : "N/A";
   };
 
   return (
@@ -66,30 +68,39 @@ function Attendance() {
           <p>{attendance?.[0]?.faculty || "N/A"}</p>
 
           <h2 className="font-bold text-lg md:text-xl">Start Date:</h2>
-          <p className="mr-5 text-gray-700">{formatDate(attendance?.[0]?.startdate)}</p>
+          <p className="mr-5 text-gray-700">
+            {formatDate(attendance?.[0]?.startdate)}
+          </p>
 
           <h2 className="font-bold text-lg md:text-xl">End Date:</h2>
-          <p className="mr-5 text-gray-700">{formatDate(attendance?.[0]?.enddate)}</p>
+          <p className="mr-5 text-gray-700">
+            {formatDate(attendance?.[0]?.enddate)}
+          </p>
         </div>
 
         {/* Responsive Table */}
         <div className="w-full overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300 text-sm md:text-base">
+          <table className="w-full border-collapse border border-gray-300 text-[10px]">
             <thead>
-              <tr className="bg-gray-100 text-gray-700">
-                <th className="p-3 text-center border">Date</th>
-                <th className="p-3 text-center border">Topic</th>
-                <th className="p-3 text-center border">Status</th>
+              <tr className="bg-gray-100 text-gray-700 text-[10px]">
+                <th className="p-2 text-center border">Date</th>
+                <th className="p-2 text-center border">Topic</th>
+                <th className="p-2 text-center border">Status</th>
               </tr>
             </thead>
             <tbody>
               {attendance.length > 0 ? (
                 attendance.map((record, index) => (
-                  <tr key={index} className="border-b hover:bg-gray-100">
-                    <td className="p-3 text-center border">{formatDate(record.date)}</td>
-                    <td className="p-3 text-center border">{record.topic}</td>
+                  <tr
+                    key={index}
+                    className="border-b hover:bg-gray-100 text-[10px]"
+                  >
+                    <td className="p-2 text-center border">
+                      {formatDate(record.date)}
+                    </td>
+                    <td className="p-2 text-center border">{record.topic}</td>
                     <td
-                      className={`p-3 text-center font-semibold border ${
+                      className={`p-2 text-center font-semibold border ${
                         record.attendence === "Present"
                           ? "text-green-600"
                           : "text-red-600"
@@ -103,7 +114,7 @@ function Attendance() {
                 <tr>
                   <td
                     colSpan="3"
-                    className="text-center text-gray-500 py-4 border"
+                    className="text-center text-gray-500 py-2 border"
                   >
                     No attendance records found.
                   </td>
@@ -112,6 +123,7 @@ function Attendance() {
             </tbody>
           </table>
         </div>
+
         <Footer />
       </div>
       <Image />

@@ -209,7 +209,7 @@ export const getAttendance = (req, res) => {
   console.log("Received:", { name_contactid, batchtime, Subject });
 
   const query = `
-    SELECT 
+    SELECT DISTINCT
       a.date, 
       a.topic, 
       a.attendence, 
