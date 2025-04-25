@@ -20,6 +20,7 @@ import attend from '../assets/icons/attend.png'
 import learn from '../assets/icons/course.png'
 import btn from '../assets/icons/btn.png'
 import girl from '../assets/icons/girl.jpg'
+import logo from '../assets/icons/logo.png'
 
 const images = {
     algo,
@@ -44,7 +45,7 @@ const images = {
     btn,
     learn,
     girl,
-    
+    logo
 
 }
 export default images;

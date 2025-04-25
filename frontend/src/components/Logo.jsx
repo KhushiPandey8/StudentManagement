@@ -1,10 +1,11 @@
 import React from 'react'
+import images from '../constant/Icon'
 
 function Logo() {
   return (
     <div className="w-full flex items-center justify-center bg-gradient-to-r from-slate-500 to-slate-950 text-white h-16 shadow-md">
           <img
-        src={logoImg}
+        src={images.logo}
         alt="I-tech Logo"
         className="h-10 w-10 mr-3 rounded-full border-2 border-white shadow-lg"
       />
