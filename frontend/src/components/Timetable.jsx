@@ -127,7 +127,7 @@ function Timetable() {
 
           {/* Status Buttons */}
           <div className="flex flex-wrap gap-3 mb-4">
-            {["Pending", "Pursuing", "Completed"].map((status) => (
+            {["Pending", "Persuing", "Completed"].map((status) => (
               <button
                 key={status}
                 className={`px-3 py-1 rounded text-xs md:text-sm ${
