@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import Logo from "./Logo";
 
 function Courses() {
+  const user = useSelector((state) => state.auth.user);
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
   const [subjects, setSubjects] = useState([]);
@@ -68,6 +69,7 @@ function Courses() {
         <Logo />
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
           <h1 className="text-2xl text-center font-bold mb-4">My Course Details</h1>
+          <h2 className="text-2xl text-center font-bold mb-4">Welcome, {user.name}</h2>
 
           <select
             className="border p-2 sm:p-3 rounded mb-4 w-full max-w-xs text-sm sm:text-base"

@@ -44,13 +44,11 @@ function Grade() {
   );
 
   return (
-    <div className="h-screen w-screen flex flex-col md:flex-row font-mono bg-gray-50">
-      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
-        <Logo />
+    <div className="inset-0 h-screen w-screen flex flex-col md:flex-row">
+    <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
+      <Logo />
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
-          <h1 className="text-2xl text-center font-bold mb-4">
-            My Grades
-          </h1>
+          <h1 className="text-2xl text-center font-bold mb-4">My Grades</h1>
 
           <select
             className="border p-2 rounded mb-4 w-full max-w-xs"
@@ -67,7 +65,13 @@ function Grade() {
 
           {selectedCourse && (
             <div className="w-full max-w-[800px] overflow-hidden">
-              <div className="grid md:grid-cols-2 gap-4 w-full">
+              <div
+                className={`w-full flex flex-wrap gap-4 ${
+                  completedSubjects.length === 0 || pendingSubjects.length === 0
+                    ? "justify-center"
+                    : "md:grid md:grid-cols-2"
+                }`}
+              >
                 {completedSubjects.length > 0 && (
                   <SubjectTable
                     title="Exam Completed Subjects"
@@ -84,7 +88,7 @@ function Grade() {
             </div>
           )}
         </div>
-        <Footer/>
+        <Footer />
       </div>
       <Image />
     </div>

@@ -9,8 +9,28 @@ function Feedback() {
     <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
       <Logo />
       <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
+          <h1 className="text-2xl font-bold mb-6 text-center">Feedback</h1>
+
+          {/* No data message */}
+          <div className="flex flex-col items-center justify-center text-gray-500 mt-20">
+            <svg
+              className="w-16 h-16 mb-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9.75 9.75h.008v.008H9.75V9.75zm0 4.5h.008v.008H9.75v-.008zm4.5-4.5h.008v.008h-.008V9.75zm0 4.5h.008v.008h-.008v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <p className="text-lg font-semibold">No feedback available</p>
+            <p className="text-sm text-gray-400">Once feedback is received, it will appear here.</p>
+          </div>
         </div>
-        <Footer/>
+        <Footer />
         </div>
         <Image/>    
         </div>
