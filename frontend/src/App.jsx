@@ -1,4 +1,5 @@
 import "./App.css";
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Exam from "./components/Exam";
@@ -16,7 +17,6 @@ import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectesRoute"; 
 import EditProfile from "./components/EditProfile";
 import Profile from "./components/Profile";
-// import BatchTiming from "./components/BatchTiming";
 import Courses from "./components/Courses";
 
 const router = createBrowserRouter([
@@ -39,7 +39,64 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  useEffect(() => {
+    let deferredPrompt;
+
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+
+      const installButton = document.getElementById("installBtn");
+      if (installButton) {
+        installButton.style.display = "block";
+
+        installButton.addEventListener("click", () => {
+          installButton.style.display = "none";
+          deferredPrompt.prompt();
+
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+              console.log("User accepted the install prompt");
+            } else {
+              console.log("User dismissed the install prompt");
+            }
+            deferredPrompt = null;
+          });
+        });
+      }
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  return (
+    <>
+      <button
+        id="installBtn"
+        style={{
+          display: "none",
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          padding: "10px 20px",
+          borderRadius: "8px",
+          backgroundColor: "#007bff",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+          zIndex: 1000,
+        }}
+      >
+        Install App
+      </button>
+
+      <RouterProvider router={router} />
+    </>
+  );
 }
 
 export default App;
