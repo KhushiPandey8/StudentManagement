@@ -33,7 +33,7 @@ function Navbar() {
                 className="w-20 h-20 md:w-20 md:h-20 object-cover rounded-full border-4 border-blue-500 shadow-lg"
               />
               <h1 className="mt-2 text-base md:text-lg">
-                {user.name || "Guest"}
+                {user.name || "Guest"} ({user.address || "N/A"})
               </h1>
               <p className="text-gray-600 text-xs md:text-sm">
                 Branch: {user.branch || "N/A"}

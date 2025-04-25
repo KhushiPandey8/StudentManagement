@@ -71,7 +71,7 @@ function Profile() {
               <p className="text-base md:text-lg text-gray-700 flex items-center">
                 <strong>Password:</strong>
                 <span className="ml-2">
-                  {showPassword ? user.password : "●●●●●●"}
+                  {showPassword ? user.password : "●●●●●●●●●●●●"}
                 </span>
                 <button
                   onClick={() => setShowPassword(!showPassword)}
