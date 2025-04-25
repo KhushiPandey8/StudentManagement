@@ -68,6 +68,26 @@ function App() {
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
+    // Service Worker Update Logic
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+        registration.onupdatefound = () => {
+          const newSW = registration.installing;
+          newSW.addEventListener('statechange', () => {
+            if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+              const updateBtn = document.createElement('button');
+              updateBtn.textContent = 'Update Available – Tap to Refresh';
+              updateBtn.onclick = () => {
+                newSW.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
+              };
+              document.body.append(updateBtn);
+            }
+          });
+        };
+      });
+    }
+
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
