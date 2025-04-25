@@ -276,22 +276,7 @@ export const getFeeDetails = (req, res) => {
   });
 };
 
-// export const getCourse = (req, res) => {
-//   const { name_contactid } = req.user;
-//   if (!name_contactid) {
-//     return res.status(400).json({ message: "User not authenticated" });
-//   }
-//   const query = `
-//     SELECT DISTINCT course, status FROM faculty_student WHERE nameid = ?`;
 
-//   db.query(query, [name_contactid], (err, results) => {
-//     if (err) {
-//       console.error("Error fetching course details:", err);
-//       return res.status(500).json({ message: "Database error" });
-//     }
-//     res.json(results);
-//   });
-// }
 export const getCourse = (req, res) => {
   const { name_contactid } = req.user;
   if (!name_contactid) {
@@ -379,8 +364,7 @@ export const getMarks = (req, res) => {
 export const updateProfile = (req, res) => {
   const { name, contact, course, address, branch, password, status, EmailId } =
     req.body;
-  const photo = req.file ? `/uploads/${req.file.filename}` : null; // Store file path if a new photo is uploaded
-
+  
   // Constructing the update query dynamically
   let updateFields = [];
   let updateValues = [];
@@ -417,11 +401,7 @@ export const updateProfile = (req, res) => {
     updateFields.push("EmailId = ?");
     updateValues.push(EmailId);
   }
-  if (photo) {
-    updateFields.push("photo = ?");
-    updateValues.push(photo);
-  }
-
+  
   if (updateFields.length === 0) {
     return res.status(400).json({ message: "No fields to update" });
   }
