@@ -54,11 +54,11 @@ function Attendance() {
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
-        <h1 className="text-lg font-semibold text-gray-800 mb-3 mt-4 text-center">
+        <h1 className="text-md font-semibold text-gray-800 mb-3 mt-4 text-center">
           Attendance Details
         </h1>
 
-        <div className="w-full flex flex-wrap justify-center md:justify-evenly items-center my-2 gap-2 text-center md:text-left text-[10px]">
+        <div className="w-full flex flex-wrap justify-center md:justify-evenly items-center my-2 gap-2 text-center md:text-left text-[13px]">
           <h2 className="font-bold">Subject:</h2>
           <p>{attendance?.[0]?.subject_name || "N/A"}</p>
 
