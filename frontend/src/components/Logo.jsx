@@ -7,7 +7,7 @@ function Logo() {
           <img
         src={images.logo}
         alt="I-tech Logo"
-        className="h-10 w-[50px] mr-3 rounded-lg border-2 border-white shadow-lg"
+        className="h-12 w-[100px] mr-3 rounded-lg border-2 border-white shadow-lg"
       />
       <h1 className="text-2xl font-extrabold font-mono tracking-widest">I-tech</h1>
     </div>
