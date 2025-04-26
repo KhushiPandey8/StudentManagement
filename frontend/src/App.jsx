@@ -1,4 +1,5 @@
 import "./App.css";
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Exam from "./components/Exam";
@@ -17,7 +18,6 @@ import ProtectedRoute from "./components/ProtectesRoute";
 import EditProfile from "./components/EditProfile";
 import Profile from "./components/Profile";
 import Courses from "./components/Courses";
-import UpdateButton from "./components/UpdateButton"; // <<-- import here
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -39,10 +39,98 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  useEffect(() => {
+    let deferredPrompt;
+
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+
+      const installButton = document.getElementById("installBtn");
+      if (installButton) {
+        installButton.style.display = "block";
+
+        installButton.addEventListener("click", () => {
+          installButton.style.display = "none";
+          deferredPrompt.prompt();
+
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+              console.log("User accepted the install prompt");
+            } else {
+              console.log("User dismissed the install prompt");
+            }
+            deferredPrompt = null;
+          });
+        });
+      }
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    // Service Worker Update Logic
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js").then((registration) => {
+        registration.onupdatefound = () => {
+          const newWorker = registration.installing;
+          newWorker.addEventListener("statechange", () => {
+            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+              showUpdateButton(newWorker);
+            }
+          });
+        };
+      });
+    }
+
+    const showUpdateButton = (worker) => {
+      const updateBtn = document.createElement("button");
+      updateBtn.textContent = "Update Available – Tap to Refresh";
+      updateBtn.style.position = "fixed";
+      updateBtn.style.bottom = "80px";
+      updateBtn.style.right = "20px";
+      updateBtn.style.padding = "10px 20px";
+      updateBtn.style.borderRadius = "8px";
+      updateBtn.style.backgroundColor = "#28a745";
+      updateBtn.style.color = "white";
+      updateBtn.style.border = "none";
+      updateBtn.style.cursor = "pointer";
+      updateBtn.style.zIndex = 1000;
+
+      updateBtn.onclick = () => {
+        worker.postMessage({ type: "SKIP_WAITING" });
+        window.location.reload();
+      };
+
+      document.body.appendChild(updateBtn);
+    };
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
+
   return (
     <>
+      <button
+        id="installBtn"
+        style={{
+          display: "none",
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          padding: "10px 20px",
+          borderRadius: "8px",
+          backgroundColor: "#007bff",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+          zIndex: 1000,
+        }}
+      >
+        Install App
+      </button>
+
       <RouterProvider router={router} />
-      <UpdateButton /> {/* <-- show Install & Update Button */}
     </>
   );
 }
