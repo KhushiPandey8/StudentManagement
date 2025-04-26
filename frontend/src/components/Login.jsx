@@ -58,14 +58,10 @@ function Login() {
       <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
         <Logo />
         <div className="flex flex-col items-center justify-center w-full max-w-md mt-auto mb-auto px-4 sm:px-6">
-          <h1 className="text-3xl text-black font-bold text-center mb-6 font-mono">
-            Login
-          </h1>
+          <h1 className="text-3xl text-black font-bold text-center mb-6 font-mono">Login</h1>
           <form className="w-full" onSubmit={handleLogin}>
             <div className="mb-4">
-              <label className="block text-black font-mono mb-2">
-                Username
-              </label>
+              <label className="block text-black font-mono mb-2">Username</label>
               <input
                 className="w-full p-2 border border-gray-300 rounded-md"
                 type="tel"
@@ -77,9 +73,7 @@ function Login() {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-black font-mono mb-2">
-                Password
-              </label>
+              <label className="block text-black font-mono mb-2">Password</label>
               <input
                 className="w-full p-2 border border-gray-300 rounded-md"
                 type="password"
@@ -91,9 +85,9 @@ function Login() {
             </div>
             <div className="mb-4">
               <ReCAPTCHA
-                sitekey="6LcWaSUrAAAAAKi8355M86oun6fj7MR5iAt1X48g"
-                onChange={handleCaptcha}
                 ref={recaptchaRef}
+                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                onChange={handleCaptcha}
               />
             </div>
             <button
