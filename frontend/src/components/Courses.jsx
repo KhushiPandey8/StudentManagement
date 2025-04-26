@@ -73,7 +73,7 @@ function Courses() {
 
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row font-mono">
-      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
+      <div className="w-full md:w-[60%] flex flex-col items-center bg-gray-100 shadow-md h-full">
         <Logo />
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
           <h2 className="text-sm text-center font-bold mb-4">

@@ -55,7 +55,7 @@ function Login() {
 
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row">
-      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
+      <div className="w-full md:w-[60%] flex flex-col items-center bg-gray-100 shadow-md h-full">
         <Logo />
         <div className="flex flex-col items-center justify-center w-full max-w-md mt-auto mb-auto px-4 sm:px-6">
           <h1 className="text-3xl text-black font-bold text-center mb-6 font-mono">
