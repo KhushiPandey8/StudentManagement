@@ -90,6 +90,12 @@ export const login = async (req, res) => {
   });
 };
 
+export const logout = (req, res) => {
+  return res.status(200).json({
+    message: "Logged out successfully.",
+    success: true,
+  });
+};
 // JWT authentication middleware
 export const authenticateJWT = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
