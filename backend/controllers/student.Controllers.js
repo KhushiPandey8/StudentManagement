@@ -2,39 +2,73 @@ import db from "../utils/db.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
+
+
 dotenv.config();
+
+const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET_KEY;
 const SECRET_KEY = process.env.JWT_SECRET || "mysecretkey";
 
 // Login endpoint
-export const login = (req, res) => {
-  const { contact, password } = req.body;
-  console.log("Login data received:", contact, password);
+export const login = async (req, res) => {
+  const { contact, password, captchaToken } = req.body;
+  console.log("Login data received:", contact);
+
+  // 1) basic payload check
   if (!contact || !password) {
     return res
       .status(400)
       .json({ message: "Contact number and password are required." });
   }
+  if (!captchaToken) {
+    return res.status(400).json({ message: "CAPTCHA token missing." });
+  }
 
+  // 2) verify reCAPTCHA
+  try {
+    const params = new URLSearchParams();
+    params.append("secret", RECAPTCHA_SECRET);
+    params.append("response", captchaToken);
+    // optional: params.append("remoteip", req.ip);
+
+    const r = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      { method: "POST", body: params }
+    );
+    const captchaRes = await r.json();
+    if (!captchaRes.success) {
+      console.warn("reCAPTCHA failed:", captchaRes["error-codes"]);
+      return res
+        .status(401)
+        .json({ message: "CAPTCHA failed—are you a robot?" });
+    }
+  } catch (err) {
+    console.error("CAPTCHA verification error:", err);
+    return res
+      .status(500)
+      .json({ message: "CAPTCHA verification service error." });
+  }
+
+  // 3) credential check
   const sql =
-    "SELECT id, contact, password, date12,name, branch, course,  address, EmailId,status, name_contactid FROM student WHERE contact = ? and password = ?";
-
+    "SELECT id, contact, password, date12, name, branch, course, address, EmailId, status, name_contactid FROM student WHERE contact = ? AND password = ?";
   db.query(sql, [contact, password], (err, result) => {
     if (err) {
       console.error("Database error:", err);
-      return res.status(500).json({ message: "Database error" });
+      return res.status(500).json({ message: "Database error." });
     }
 
-    console.log("Database result:", result);
-
     if (result.length === 0) {
-      return res.status(401).json({ message: "Invalid Username or Password" });
+      return res
+        .status(401)
+        .json({ message: "Invalid Username or Password." });
     }
 
     const user = result[0];
     const token = jwt.sign(
       { id: user.id, name_contactid: user.name_contactid },
       SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: "30d" }
     );
 
     res.json({
@@ -46,10 +80,6 @@ export const login = (req, res) => {
         name_contactid: user.name_contactid,
         branch: user.branch,
         course: user.course,
-        // photo: user.photo
-        //   ? `${req.protocol}://${req.get("host")}${user.photo}`
-        //   : null,
-        // Using the raw value from the DB
         password: user.password,
         address: user.address,
         EmailId: user.EmailId,
@@ -57,14 +87,6 @@ export const login = (req, res) => {
         date12: user.date12,
       },
     });
-  });
-};
-
-// Logout endpoint
-export const logout = (req, res) => {
-  return res.status(200).json({
-    message: "Logged out successfully.",
-    success: true,
   });
 };
 

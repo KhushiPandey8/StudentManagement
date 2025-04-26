@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import ReCAPTCHA from "react-google-recaptcha";
 import { loginSuccess } from "../redux/store";
 import Logo from "./Logo";
 import Image from "./Image";
@@ -8,19 +9,32 @@ import Image from "./Image";
 function Login() {
   const [contact, setContact] = useState("");
   const [password, setPassword] = useState("");
+  const [captchaToken, setCaptchaToken] = useState("");
+  const recaptchaRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const handleCaptcha = (token) => {
+    setCaptchaToken(token);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    if (!captchaToken) {
+      return alert("Please complete the CAPTCHA");
+    }
+
     try {
-      const response = await fetch("https://studentmanagement-anwx.onrender.com/api/v1/routes/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        withCredentials:true,
-        body: JSON.stringify({ contact, password }),
-      });
+      const response = await fetch(
+        "https://studentmanagement-anwx.onrender.com/api/v1/routes/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // send cookies if you’re using any
+          body: JSON.stringify({ contact, password, captchaToken }),
+        }
+      );
 
       const data = await response.json();
 
@@ -28,19 +42,27 @@ function Login() {
         dispatch(loginSuccess(data)); // Store user & token in Redux
         navigate("/");
       } else {
+        // reset the widget so user can try again
+        recaptchaRef.current.reset();
+        setCaptchaToken("");
         alert(data.message);
       }
     } catch (error) {
       console.error("Login failed:", error);
+      recaptchaRef.current.reset();
+      setCaptchaToken("");
+      alert("Network error, please try again.");
     }
   };
 
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row">
-      <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
-        <Logo />
-        <div className="flex flex-col items-center justify-center w-full max-w-md mt-auto mb-auto px-4 sm:px-6">
-          <h1 className="text-3xl text-black font-bold text-center mb-6 font-mono">Login</h1>
+    <div className="w-full md:w-[60%] flex flex-col items-center bg-white shadow-md h-full">
+      <Logo />
+      <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
+          <h1 className="text-3xl text-black font-bold text-center mb-6 font-mono">
+            Login
+          </h1>
           <form className="w-full" onSubmit={handleLogin}>
             <div className="mb-4">
               <label className="block text-black font-mono mb-2">Username</label>
@@ -50,7 +72,9 @@ function Login() {
                 pattern="[0-9]{10}"
                 placeholder="Enter Username"
                 value={contact}
-                onChange={(e) => setContact(e.target.value.replace(/\D/g, ""))}
+                onChange={(e) =>
+                  setContact(e.target.value.replace(/\D/g, ""))
+                }
                 required
               />
             </div>
@@ -65,7 +89,17 @@ function Login() {
                 required
               />
             </div>
-            <button className="w-full bg-blue-600 text-white py-2 rounded-md text-lg font-mono hover:bg-blue-700 transition-all" type="submit">
+            <div className="mb-4">
+              <ReCAPTCHA
+                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                onChange={handleCaptcha}
+                ref={recaptchaRef}
+              />
+            </div>
+            <button
+              className="w-full bg-blue-600 text-white py-2 rounded-md text-lg font-mono hover:bg-blue-700 transition-all"
+              type="submit"
+            >
               Login
             </button>
           </form>
