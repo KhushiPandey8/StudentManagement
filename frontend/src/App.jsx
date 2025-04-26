@@ -1,5 +1,6 @@
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Exam from "./components/Exam";
@@ -14,7 +15,7 @@ import Settings from "./components/Settings";
 import LeaveNote from "./components/LeaveNote";
 import Attendance from "./components/Attendance";
 import Login from "./components/Login";
-import ProtectedRoute from "./components/ProtectesRoute";
+import ProtectedRoute from "./components/ProtectesRoute"; 
 import EditProfile from "./components/EditProfile";
 import Profile from "./components/Profile";
 import Courses from "./components/Courses";
@@ -39,6 +40,9 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const [showUpdate, setShowUpdate] = useState(false);
+  const location = useLocation();
+
   useEffect(() => {
     let deferredPrompt;
 
@@ -69,45 +73,30 @@ function App() {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     // Service Worker Update Logic
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js").then((registration) => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js').then((registration) => {
         registration.onupdatefound = () => {
-          const newWorker = registration.installing;
-          newWorker.addEventListener("statechange", () => {
-            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-              showUpdateButton(newWorker);
+          const newSW = registration.installing;
+          newSW.addEventListener('statechange', () => {
+            if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+              setShowUpdate(true); // Show the update button
             }
           });
         };
       });
     }
 
-    const showUpdateButton = (worker) => {
-      const updateBtn = document.createElement("button");
-      updateBtn.textContent = "Update Available – Tap to Refresh";
-      updateBtn.style.position = "fixed";
-      updateBtn.style.bottom = "80px";
-      updateBtn.style.right = "20px";
-      updateBtn.style.padding = "10px 20px";
-      updateBtn.style.borderRadius = "8px";
-      updateBtn.style.backgroundColor = "#28a745";
-      updateBtn.style.color = "white";
-      updateBtn.style.border = "none";
-      updateBtn.style.cursor = "pointer";
-      updateBtn.style.zIndex = 1000;
-
-      updateBtn.onclick = () => {
-        worker.postMessage({ type: "SKIP_WAITING" });
-        window.location.reload();
-      };
-
-      document.body.appendChild(updateBtn);
-    };
-
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
+
+  const handleUpdate = () => {
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+      window.location.reload();
+    }
+  };
 
   return (
     <>
@@ -116,9 +105,9 @@ function App() {
         style={{
           display: "none",
           position: "fixed",
-          bottom: "20px",
+          bottom: "80px",
           right: "20px",
-          padding: "10px 20px",
+          padding: "8px 16px",
           borderRadius: "8px",
           backgroundColor: "#007bff",
           color: "white",
@@ -129,6 +118,28 @@ function App() {
       >
         Install App
       </button>
+
+      {/* Show Update Button Only on Login Page */}
+      {showUpdate && location.pathname === "/login" && (
+        <button
+          onClick={handleUpdate}
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            padding: "6px 12px",
+            fontSize: "14px",
+            borderRadius: "6px",
+            backgroundColor: "#28a745",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+            zIndex: 1000,
+          }}
+        >
+          Update Available
+        </button>
+      )}
 
       <RouterProvider router={router} />
     </>
