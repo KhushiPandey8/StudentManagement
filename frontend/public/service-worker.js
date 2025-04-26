@@ -1,13 +1,12 @@
-// Service Worker file (public/service-worker.js)
-
+// public/service-worker.js
 self.addEventListener("install", (event) => {
-  console.log("[Service Worker] Installing new service worker...");
-  self.skipWaiting(); // Activate immediately
+  console.log("[Service Worker] Installing...");
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
-  console.log("[Service Worker] Activating service worker...");
-  event.waitUntil(clients.claim()); // Control all clients immediately
+  console.log("[Service Worker] Activating...");
+  event.waitUntil(clients.claim());
 });
 
 self.addEventListener("message", (event) => {
@@ -15,6 +14,3 @@ self.addEventListener("message", (event) => {
     self.skipWaiting();
   }
 });
-
-// You can also add caching and fetch strategies if you want
-// but for now, it only handles installation and update.
