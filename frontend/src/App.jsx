@@ -68,42 +68,6 @@ function App() {
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
-    // Service Worker Update Logic
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js").then((registration) => {
-        registration.onupdatefound = () => {
-          const newWorker = registration.installing;
-          newWorker.addEventListener("statechange", () => {
-            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-              showUpdateButton(newWorker);
-            }
-          });
-        };
-      });
-    }
-
-    const showUpdateButton = (worker) => {
-      const updateBtn = document.createElement("button");
-      updateBtn.textContent = "Update Available – Tap to Refresh";
-      updateBtn.style.position = "fixed";
-      updateBtn.style.bottom = "80px";
-      updateBtn.style.right = "20px";
-      updateBtn.style.padding = "10px 20px";
-      updateBtn.style.borderRadius = "8px";
-      updateBtn.style.backgroundColor = "#28a745";
-      updateBtn.style.color = "white";
-      updateBtn.style.border = "none";
-      updateBtn.style.cursor = "pointer";
-      updateBtn.style.zIndex = 1000;
-
-      updateBtn.onclick = () => {
-        worker.postMessage({ type: "SKIP_WAITING" });
-        window.location.reload();
-      };
-
-      document.body.appendChild(updateBtn);
-    };
-
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };

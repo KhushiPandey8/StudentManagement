@@ -1,16 +1,7 @@
-// public/service-worker.js
-self.addEventListener("install", (event) => {
-  console.log("[Service Worker] Installing...");
-  self.skipWaiting();
+self.addEventListener('install', (event) => {
+  self.skipWaiting(); // Force the waiting service worker to become active immediately
 });
 
-self.addEventListener("activate", (event) => {
-  console.log("[Service Worker] Activating...");
-  event.waitUntil(clients.claim());
-});
-
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim()); // Take control of all pages
 });
