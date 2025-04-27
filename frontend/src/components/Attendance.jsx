@@ -79,7 +79,7 @@ function Attendance() {
       <div className="w-full md:w-[60%] flex flex-col items-center bg-gray-100 shadow-md h-full">
         <Logo />
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
-          <h1 className="text-md font-semibold text-gray-800 mb-3 mt-4 text-center">
+          <h1 className="text-md font-bold text-gray-800 mb-3 mt-4 text-center">
             Attendance Details
           </h1>
 
