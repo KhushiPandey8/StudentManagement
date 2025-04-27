@@ -115,7 +115,7 @@ export const getBatch = (req, res) => {
   const { name_contactid } = req.user; // Extracted from token
 
   const sql = `
-    SELECT 
+    SELECT DISTINCT
       s.subjectname, 
       s.coursename AS course, 
       COALESCE(fs2.status, 'Pending') AS status,
@@ -238,7 +238,7 @@ export const getAttendance = (req, res) => {
   console.log("Received:", { name_contactid, batchtime, Subject });
 
   const query = `
-    SELECT
+    SELECT DISTINCT
   a.date, 
   a.topic, 
   a.attendence, 
@@ -288,7 +288,7 @@ export const getFeeDetails = (req, res) => {
   }
 
   const query = `
-    SELECT 
+    SELECT DISTINCT
       Receipt, name, course, Recieve, Dates, ModeOfPayement, 
       courseFees, Paid, Balance, status, totalfees, course
     FROM payement 
@@ -310,7 +310,7 @@ export const getCourse = (req, res) => {
   }
 
   const query = `
-    SELECT 
+    SELECT DISTINCT
         s.subjectname, 
         s.coursename AS course, 
         COALESCE(fs2.status, 'Pending') AS status
