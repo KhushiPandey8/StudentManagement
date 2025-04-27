@@ -81,7 +81,7 @@ function Navbar() {
                   <img
                     src={item.icon}
                     alt={item.name}
-                    className="h-15 w-15 md:h-19 md:w-19 lg:h-21 lg:w-21 shadow-2xl rounded-2xl p-3 bg-white
+                    className="h-14 w-14 md:h-18 md:w-18 lg:h-20 lg:w-20 shadow-lg rounded-3xl p-3 bg-white
                     hover:bg-gray-100 transition-transform duration-200 ease-in-out transform 
                     hover:scale-110 focus:scale-110 active:scale-90"
                   />
