@@ -12,7 +12,7 @@ const SECRET_KEY = process.env.JWT_SECRET || "mysecretkey";
 // Login endpoint
 export const login = async (req, res) => {
   const { username, password, captchaToken } = req.body;
-  console.log("Login data received:", contact);
+  console.log("Login data received:", username);
 
   // 1) basic payload check
   if (!username || !password) {
