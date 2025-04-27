@@ -11,14 +11,14 @@ const SECRET_KEY = process.env.JWT_SECRET || "mysecretkey";
 
 // Login endpoint
 export const login = async (req, res) => {
-  const { contact, password, captchaToken } = req.body;
-  console.log("Login data received:", contact);
+  const { username, password, captchaToken } = req.body; // Using username
+  console.log("Login data received:", username);
 
   // 1) basic payload check
-  if (!contact || !password) {
+  if (!username || !password) {
     return res
       .status(400)
-      .json({ message: "Contact number and password are required." });
+      .json({ message: "Username and password are required." });
   }
   if (!captchaToken) {
     return res.status(400).json({ message: "CAPTCHA token missing." });
@@ -29,7 +29,6 @@ export const login = async (req, res) => {
     const params = new URLSearchParams();
     params.append("secret", RECAPTCHA_SECRET);
     params.append("response", captchaToken);
-    // optional: params.append("remoteip", req.ip);
 
     const r = await fetch(
       "https://www.google.com/recaptcha/api/siteverify",
@@ -51,8 +50,8 @@ export const login = async (req, res) => {
 
   // 3) credential check
   const sql =
-    "SELECT id, contact, password, date12, name, branch, course, address, EmailId, status, name_contactid FROM student WHERE contact = ? AND password = ?";
-  db.query(sql, [contact, password], (err, result) => {
+    "SELECT id, username, password, date12, name, branch, course, address, EmailId, status, name_contactid FROM student WHERE username = ? AND password = ?";
+  db.query(sql, [username, password], (err, result) => {
     if (err) {
       console.error("Database error:", err);
       return res.status(500).json({ message: "Database error." });
@@ -75,7 +74,7 @@ export const login = async (req, res) => {
       token,
       user: {
         id: user.id,
-        contact: user.contact,
+        username: user.username, // Returning username instead of contact
         name: user.name,
         name_contactid: user.name_contactid,
         branch: user.branch,
