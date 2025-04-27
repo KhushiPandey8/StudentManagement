@@ -30,7 +30,7 @@ function Navbar() {
               <img
                 src={images.girl || "N/A"}
                 alt="Profile Light"
-                className="w-21 h-21 md:w-21 md:h-21 object-cover rounded-full border-4 border-blue-500 shadow-lg"
+                className="w-20 h-20 md:w-20 md:h-20 object-cover rounded-full border-4 border-blue-500 shadow-lg"
               />
               <h1 className="mt-2 text-base md:text-md">
                 {user.name || "Guest"} ({user.address || "N/A"})
