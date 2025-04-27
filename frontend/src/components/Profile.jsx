@@ -26,7 +26,7 @@ function Profile() {
       <div className="w-full md:w-[60%] flex flex-col items-center bg-gray-100 shadow-md h-full overflow-hidden-scrollbar">
         <Logo />
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
-          <h1 className="text-2xl md:text-3xl font-bold mt-4 text-gray-800">
+          <h1 className="text-xl md:text-2xl font-bold mt-4 text-gray-800">
             Profile
           </h1>
           <div className="relative mt-4">
@@ -53,7 +53,7 @@ function Profile() {
 
           <div className="mt-6 w-full max-w-sm md:max-w-lg p-6 bg-gray-100 rounded-lg shadow-md">
             <div className="mb-4 p-4 bg-white rounded-lg shadow">
-              <p className="text-base md:text-lg font-semibold text-gray-700">
+              <p className="text-base md:text-md font-semibold text-gray-700">
                 <strong>Name:</strong> {user.name}
               </p>
               <p className="text-base md:text-lg text-gray-700">
@@ -94,8 +94,8 @@ function Profile() {
                 <span
                   className={`${
                     user.status === "Active"
-                      ? "text-green-600"
-                      : "text-red-600"
+                      ? "text-red-600"
+                      : "text-green-600"
                   }`}
                 >
                   {user.status || "Not Provided"}

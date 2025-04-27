@@ -227,7 +227,7 @@ export const getBatchTimetable = (req, res) => {
 
 export const getAttendance = (req, res) => {
   const { batchtime, Subject } = req.query;
-  const { name_contactid } = req.user; // Ensure logged-in user
+  const { name_contactid } = req.user; 
 
   if (!batchtime || !name_contactid || !Subject) {
     return res

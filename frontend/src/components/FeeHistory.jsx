@@ -83,8 +83,6 @@ function FeeHistory() {
         <div className="mt-5 flex-1 overflow-y-auto w-full flex flex-col items-center p-4">
           <div className="p-4 w-full">
             <h1 className="text-xl text-center font-bold mb-4">Fees Details</h1>
-
-            {/* Left-side information table */}
             <table className="w-full mb-4 border border-gray-400 text-xs">
               <tbody>
                 <tr className="border border-gray-400">
