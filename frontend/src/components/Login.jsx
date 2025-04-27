@@ -7,7 +7,7 @@ import Logo from "./Logo";
 import Image from "./Image";
 
 function Login() {
-  const [contact, setContact] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
   const recaptchaRef = useRef(null);
@@ -32,7 +32,7 @@ function Login() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
-          body: JSON.stringify({ contact, password, captchaToken }),
+          body: JSON.stringify({ username, password, captchaToken }),
         }
       );
 
@@ -68,11 +68,10 @@ function Login() {
               </label>
               <input
                 className="w-full p-2 border border-gray-300 rounded-md"
-                type="tel"
-                pattern="[0-9]{10}"
+                type="text"
                 placeholder="Enter Username"
-                value={contact}
-                onChange={(e) => setContact(e.target.value.replace(/\D/g, ""))}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
