@@ -99,9 +99,8 @@ function Timetable() {
       <div className="w-full md:w-[60%] flex flex-col items-center bg-gray-100 shadow-md h-full">
         <Logo />
         <div className="mt-3 flex-1 overflow-y-auto w-full flex flex-col items-center p-3">
-          <h1 className="text-xl md:text-2xl text-center font-semibold mb-3">My Course Details</h1>
+          <h1 className="text-xl md:text-2xl text-center font-bold mb-3">My Course Details</h1>
 
-          {/* Course Dropdown */}
           <select
             className="border border-gray-400 p-1 md:p-2 rounded mb-3 text-sm md:text-base"
             value={selectedCourse}
