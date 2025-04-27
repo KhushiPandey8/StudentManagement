@@ -21,6 +21,7 @@ function EditProfile() {
     branch: user.branch || "",
     password: "",
     status: user.status || "",
+    username: user.username || "",
     EmailId: user.EmailId || "Not Available",
   });
 
@@ -83,6 +84,7 @@ function EditProfile() {
 
             <input className="w-full p-3 mb-3 border rounded-md" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" />
             <input className="w-full p-3 mb-3 border rounded-md" type="text" name="contact" value={formData.contact} onChange={handleChange} placeholder="Contact" />
+            <input className="w-full p-3 mb-3 border rounded-md" type="text" name="username" value={formData.username} onChange={handleChange} placeholder="Username" />
             <input className="w-full p-3 mb-3 border rounded-md" type="text" name="course" value={formData.course} onChange={handleChange} placeholder="Course" />
             <input className="w-full p-3 mb-3 border rounded-md" type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Address" />
             <input className="w-full p-3 mb-3 border rounded-md" type="text" name="branch" value={formData.branch} onChange={handleChange} placeholder="Branch" />

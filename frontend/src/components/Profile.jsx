@@ -59,6 +59,10 @@ function Profile() {
               <p className="text-base md:text-lg text-gray-700">
                 <strong>Course:</strong> {user.course}
               </p>
+              <p className="text-base md:text-lg text-gray-700">
+                <strong>Username:</strong> {user.username}
+              </p>
+              
             </div>
 
             <div className="mt-4 p-4 bg-white rounded-lg shadow">

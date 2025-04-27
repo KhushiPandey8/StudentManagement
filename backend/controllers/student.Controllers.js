@@ -50,7 +50,7 @@ export const login = async (req, res) => {
 
   // 3) credential check
   const sql =
-    "SELECT id, username, password, date12, name, branch, course, address, EmailId, status, name_contactid FROM student WHERE username = ? AND password = ?";
+    "SELECT id, username, password, contact, date12, name, branch, course, address, EmailId, status, name_contactid FROM student WHERE username = ? AND password = ?";
   db.query(sql, [username, password], (err, result) => {
     if (err) {
       console.error("Database error:", err);
@@ -84,6 +84,7 @@ export const login = async (req, res) => {
         EmailId: user.EmailId,
         status: user.status,
         date12: user.date12,
+        contact: user.contact,
       },
     });
   });
@@ -389,7 +390,7 @@ export const getMarks = (req, res) => {
 };
 
 export const updateProfile = (req, res) => {
-  const { name, contact, course, address, branch, password, status, EmailId } =
+  const { name, contact, course, address, branch, password, status, EmailId, username } =
     req.body;
 
   // Constructing the update query dynamically
@@ -403,6 +404,10 @@ export const updateProfile = (req, res) => {
   if (contact) {
     updateFields.push("contact = ?");
     updateValues.push(contact);
+  }
+  if (username) {
+    updateFields.push("username = ?");
+    updateValues.push(username);
   }
   if (course) {
     updateFields.push("course = ?");
