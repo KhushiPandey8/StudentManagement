@@ -89,8 +89,8 @@ function Login() {
               />
             </div>
             <div className="mb-4">
-            <ReCAPTCHA
-                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}  // Using .env variable for site key
+              <ReCAPTCHA
+                sitekey="6LcWaSUrAAAAAKi8355M86oun6fj7MR5iAt1X48g"
                 onChange={handleCaptcha}
                 ref={recaptchaRef}
               />

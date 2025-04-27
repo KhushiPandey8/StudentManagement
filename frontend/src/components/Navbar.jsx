@@ -30,9 +30,9 @@ function Navbar() {
               <img
                 src={images.girl || "N/A"}
                 alt="Profile Light"
-                className="w-20 h-20 md:w-20 md:h-20 object-cover rounded-full border-4 border-blue-500 shadow-lg"
+                className="w-21 h-21 md:w-21 md:h-21 object-cover rounded-full border-4 border-blue-500 shadow-lg"
               />
-              <h1 className="mt-2 text-base md:text-lg">
+              <h1 className="mt-2 text-base md:text-md">
                 {user.name || "Guest"} ({user.address || "N/A"})
               </h1>
               <p className="text-gray-600 text-xs md:text-sm">
@@ -81,7 +81,7 @@ function Navbar() {
                   <img
                     src={item.icon}
                     alt={item.name}
-                    className="h-20 w-20 md:h-24 md:w-24 lg:h-28 lg:w-28 shadow-lg rounded-3xl p-4 bg-white
+                    className="h-20 w-20 md:h-24 md:w-24 lg:h-28 lg:w-28 shadow-lg rounded-3xl p-3 bg-white
   hover:bg-gray-100 transition-transform duration-200 ease-in-out transform 
     hover:scale-110 focus:scale-110 active:scale-90"
                   />
