@@ -11,11 +11,11 @@ const SECRET_KEY = process.env.JWT_SECRET || "mysecretkey";
 
 // Login endpoint
 export const login = async (req, res) => {
-  const { username, password, captchaToken } = req.body;
-  console.log("Login data received:", username);
+  const { contact, password, captchaToken } = req.body;
+  console.log("Login data received:", contact);
 
   // 1) basic payload check
-  if (!username || !password) {
+  if (!contact || !password) {
     return res
       .status(400)
       .json({ message: "Contact number and password are required." });
@@ -51,8 +51,8 @@ export const login = async (req, res) => {
 
   // 3) credential check
   const sql =
-    "SELECT id, contact, username, password, date12, name, branch, course, address, EmailId, status, name_contactid FROM student WHERE contact = ? AND password = ?";
-  db.query(sql, [username, password], (err, result) => {
+    "SELECT id, contact, password, date12, name, branch, course, address, EmailId, status, name_contactid FROM student WHERE contact = ? AND password = ?";
+  db.query(sql, [contact, password], (err, result) => {
     if (err) {
       console.error("Database error:", err);
       return res.status(500).json({ message: "Database error." });
@@ -81,7 +81,6 @@ export const login = async (req, res) => {
         branch: user.branch,
         course: user.course,
         password: user.password,
-        username:user.username,
         address: user.address,
         EmailId: user.EmailId,
         status: user.status,
