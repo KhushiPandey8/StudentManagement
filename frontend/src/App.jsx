@@ -6,7 +6,6 @@ import Exam from "./components/Exam";
 import Notes from "./components/Notes";
 import Feedback from "./components/Feedback";
 import FeeHistory from "./components/FeeHistory";
-import StudentResult from "./components/StudentResult";
 import Timetable from "./components/Timetable";
 import Support from "./components/Support";
 import Grade from "./components/Grade";
@@ -27,7 +26,6 @@ const router = createBrowserRouter([
   { path: "/feedback", element: <ProtectedRoute><Feedback /></ProtectedRoute> },
   { path: "/attend", element: <ProtectedRoute><Attendance /></ProtectedRoute> },
   { path: "/fee-history", element: <ProtectedRoute><FeeHistory /></ProtectedRoute> },
-  { path: "/result", element: <ProtectedRoute><StudentResult /></ProtectedRoute> },
   { path: "/timetable", element: <ProtectedRoute><Timetable /></ProtectedRoute> },
   { path: "/support", element: <ProtectedRoute><Support /></ProtectedRoute> },
   { path: "/settings", element: <ProtectedRoute><Settings /></ProtectedRoute> },
