@@ -352,10 +352,8 @@ export const getMarks = (req, res) => {
 };
 
 export const updateProfile = (req, res) => {
-  const { name, contact, course, address, branch, password, status, EmailId, username } =
-    req.body;
+  const { name, contact, course, address, branch, password, status, EmailId, username } = req.body;
 
-  // Constructing the update query dynamically
   let updateFields = [];
   let updateValues = [];
 
@@ -400,7 +398,7 @@ export const updateProfile = (req, res) => {
     return res.status(400).json({ message: "No fields to update" });
   }
 
-  updateValues.push(req.user.id); // Add user ID for WHERE clause
+  updateValues.push(req.user.id);
 
   const sql = `UPDATE student SET ${updateFields.join(", ")} WHERE id = ?`;
 
@@ -409,7 +407,6 @@ export const updateProfile = (req, res) => {
       console.error("Database error:", err);
       return res.status(500).json({ message: "Database update failed" });
     }
-    res.json({ message: "Profile updated successfully", photo });
+    return res.json({ message: "Profile updated successfully" });
   });
 };
-
