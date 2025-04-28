@@ -20,7 +20,7 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
-app.use('/uploads', express.static('uploads'));
+
 
 // API Routes
 app.use("/api/v1/routes",routes);
