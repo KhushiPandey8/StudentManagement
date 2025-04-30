@@ -47,7 +47,7 @@ function EditProfile() {
       }
 
       const res = await axios.post(
-        "https://studentmanagement-anwx.onrender.com/api/v1/routes/update-profile",
+        "http://srv807475.hstgr.cloud/api/v1/routes/update-profile",
         cleanedFormData,
         {
           headers: {

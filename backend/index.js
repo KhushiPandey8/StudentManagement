@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin: 'https://your-frontend-domain.com',
+  origin: 'http://srv807475.hstgr.cloud',
   credentials: true
 }
 app.use(cors(corsOptions));

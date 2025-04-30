@@ -21,7 +21,7 @@ function Courses() {
         }
 
         const response = await axios.get(
-          "https://studentmanagement-anwx.onrender.com/api/v1/routes/course-details",
+          "http://srv807475.hstgr.cloud/api/v1/routes/course-details",
           {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,

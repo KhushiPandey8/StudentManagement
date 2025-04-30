@@ -19,7 +19,7 @@ function Grade() {
         }
 
         const response = await axios.get(
-          "https://studentmanagement-anwx.onrender.com/api/v1/routes/get-marks",
+          "http://srv807475.hstgr.cloud/api/v1/routes/get-marks",
           {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,

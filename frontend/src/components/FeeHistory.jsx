@@ -14,7 +14,7 @@ function FeeHistory() {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "https://studentmanagement-anwx.onrender.com/api/v1/routes/fee-details",
+          "http://srv807475.hstgr.cloud/api/v1/routes/fee-details",
           {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,
