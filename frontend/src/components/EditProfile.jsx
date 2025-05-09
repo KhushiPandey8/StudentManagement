@@ -47,7 +47,7 @@ function EditProfile() {
       }
 
       const res = await axios.post(
-        "http://srv807475.hstgr.cloud/api/v1/routes/update-profile",
+        "http://studentapp.i-tech.net.in/api/v1/routes/update-profile",
         cleanedFormData,
         {
           headers: {

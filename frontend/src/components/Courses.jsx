@@ -21,7 +21,7 @@ function Courses() {
         }
 
         const response = await axios.get(
-          "http://srv807475.hstgr.cloud/api/v1/routes/course-details",
+          "http://studentapp.i-tech.net.in/api/v1/routes/course-details",
           {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,

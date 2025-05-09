@@ -25,7 +25,7 @@ function Attendance() {
 
       try {
         const response = await fetch(
-          `http://srv807475.hstgr.cloud/api/v1/routes/attendance?batchtime=${batchtime}&Subject=${Subject}`,
+          `http://studentapp.i-tech.net.in/api/v1/routes/attendance?batchtime=${batchtime}&Subject=${Subject}`,
           {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,

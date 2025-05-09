@@ -19,7 +19,7 @@ function Grade() {
         }
 
         const response = await axios.get(
-          "http://srv807475.hstgr.cloud/api/v1/routes/get-marks",
+          "http://studentapp.i-tech.net.in/api/v1/routes/get-marks",
           {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,

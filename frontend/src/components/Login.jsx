@@ -27,7 +27,7 @@ function Login() {
 
     try {
       const response = await fetch(
-        "http://srv807475.hstgr.cloud/api/v1/routes/login",
+        "http://studentapp.i-tech.net.in/api/v1/routes/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
