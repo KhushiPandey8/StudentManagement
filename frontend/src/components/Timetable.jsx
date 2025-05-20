@@ -19,7 +19,7 @@ function Timetable() {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://studentapp.i-tech.net.in/api/v1/routes/get-batch",
+          "https://studentapp.i-tech.net.in/api/v1/routes/get-batch",
           {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,

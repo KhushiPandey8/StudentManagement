@@ -11,7 +11,7 @@ function Footer({ setUser }) {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    fetch("http://studentapp.i-tech.net.in/api/v1/routes/logout", { 
+    fetch("https://studentapp.i-tech.net.in/api/v1/routes/logout", { 
         method: "POST", 
         credentials: "include",
         withCredentials:true
