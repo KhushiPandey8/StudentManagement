@@ -26,10 +26,13 @@ app.use(cors(corsOptions));
 app.use("/api/v1/routes",routes);
 
 // Serve React Frontend
-app.use(express.static(path.join(__dirname, "/frontend/dist")));
-app.get("*", (req,res)=>{
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-})
+// Serve React build from ../frontend/dist
+const clientBuildPath = path.join(__dirname, "..", "frontend", "dist");
+app.use(express.static(clientBuildPath));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(clientBuildPath, "index.html"));
+});
+
 
 
 app.listen(PORT, () => {
