@@ -17,7 +17,7 @@ function FeeHistory() {
           "https://studentapp.i-tech.net.in/api/v1/routes/fee-details",
           {
             headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
+            credentials: "include",
           }
         );
         setFees(Array.isArray(response.data) ? response.data : []);

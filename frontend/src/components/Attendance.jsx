@@ -28,7 +28,7 @@ function Attendance() {
           `https://studentapp.i-tech.net.in/api/v1/routes/attendance?batchtime=${batchtime}&Subject=${Subject}`,
           {
             headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
+            credentials: "include",
           }
         );
 

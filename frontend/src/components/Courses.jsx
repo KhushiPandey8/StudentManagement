@@ -24,7 +24,7 @@ function Courses() {
           "https://studentapp.i-tech.net.in/api/v1/routes/course-details",
           {
             headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
+           credentials: "include",
           }
         );
 

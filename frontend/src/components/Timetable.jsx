@@ -22,7 +22,7 @@ function Timetable() {
           "https://studentapp.i-tech.net.in/api/v1/routes/get-batch",
           {
             headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
+            credentials: "include",
           }
         );
 
