@@ -1,7 +1,7 @@
 import db from "../utils/db.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-
+import fetch from "node-fetch";  
 
 
 dotenv.config();
