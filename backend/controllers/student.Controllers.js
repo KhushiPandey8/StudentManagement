@@ -53,8 +53,8 @@ export const login = async (req, res) => {
     "SELECT id, username, password, contact, date12, name, branch, course, address, EmailId, status, name_contactid FROM student WHERE username = ? AND password = ?";
   db.query(sql, [username, password], (err, result) => {
     if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ message: "Database error." });
+      console.error("Server error:", err);
+      return res.status(500).json({ message: "Server error." });
     }
 
     if (result.length === 0) {
