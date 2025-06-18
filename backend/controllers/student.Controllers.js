@@ -7,87 +7,71 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET_KEY;
-const SECRET_KEY = process.env.JWT_SECRET || "mysecretkey";
+const JWT_SECRET     = process.env.JWT_SECRET;
 
-// Login endpoint
 export const login = async (req, res) => {
-  const { username, password, captchaToken } = req.body; // Using username
-  console.log("Login data received:", username);
+  const { username, password, captchaToken } = req.body;
 
-  // 1) basic payload check
+  // 1) Basic payload check
   if (!username || !password) {
-    return res
-      .status(400)
-      .json({ message: "Username and password are required." });
+    return res.status(400).json({ message: "Username and password required" });
   }
   if (!captchaToken) {
     return res.status(400).json({ message: "CAPTCHA token missing." });
   }
 
-  // 2) verify reCAPTCHA
+  // 2) Verify reCAPTCHA
   try {
     const params = new URLSearchParams();
     params.append("secret", RECAPTCHA_SECRET);
     params.append("response", captchaToken);
 
-    const r = await fetch(
-      "https://www.google.com/recaptcha/api/siteverify",
-      { method: "POST", body: params }
-    );
-    const captchaRes = await r.json();
-    if (!captchaRes.success) {
-      console.warn("reCAPTCHA failed:", captchaRes["error-codes"]);
-      return res
-        .status(401)
-        .json({ message: "CAPTCHA failed—are you a robot?" });
+    const r = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      body: params
+    });
+    const { success, "error-codes": errors } = await r.json();
+
+    if (!success) {
+      console.warn("reCAPTCHA failed:", errors);
+      // reset on client by sending a flag
+      return res.status(401).json({
+        message: errors.includes("timeout-or-duplicate")
+          ? "CAPTCHA timed out or was already used; please try again."
+          : "CAPTCHA verification failed."
+      });
     }
   } catch (err) {
     console.error("CAPTCHA verification error:", err);
-    return res
-      .status(500)
-      .json({ message: "CAPTCHA verification service error." });
+    return res.status(500).json({ message: "CAPTCHA service error." });
   }
 
-  // 3) credential check
-  const sql =
-    "SELECT id, username, password, contact, date12, name, branch, course, address, EmailId, status, name_contactid FROM student WHERE username = ? AND password = ?";
-  db.query(sql, [username, password], (err, result) => {
-    if (err) {
-      console.error("Server error:", err);
-      return res.status(500).json({ message: "Server error." });
+  // 3) Credential check
+  try {
+    const sql = `
+      SELECT id, username, password, contact, date12, name, branch,
+             course, address, EmailId, status, name_contactid
+      FROM student
+      WHERE username = ? AND password = ?
+    `;
+    const [rows] = await db.query(sql, [username, password]);
+
+    if (rows.length === 0) {
+      return res.status(401).json({ message: "Invalid username or password." });
     }
 
-    if (result.length === 0) {
-      return res
-        .status(401)
-        .json({ message: "Invalid Username or Password." });
-    }
-
-    const user = result[0];
+    const user = rows[0];
     const token = jwt.sign(
       { id: user.id, name_contactid: user.name_contactid },
-      SECRET_KEY,
+      JWT_SECRET,
       { expiresIn: "30d" }
     );
 
-    res.json({
-      token,
-      user: {
-        id: user.id,
-        username: user.username, // Returning username instead of contact
-        name: user.name,
-        name_contactid: user.name_contactid,
-        branch: user.branch,
-        course: user.course,
-        password: user.password,
-        address: user.address,
-        EmailId: user.EmailId,
-        status: user.status,
-        date12: user.date12,
-        contact: user.contact,
-      },
-    });
-  });
+    return res.json({ token, user });
+  } catch (err) {
+    console.error("Server error:", err);
+    return res.status(500).json({ message: "Server error." });
+  }
 };
 
 export const logout = (req, res) => {

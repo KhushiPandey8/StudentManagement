@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../redux/store";
 import ReCAPTCHA from "react-google-recaptcha";
 import Logo from "./Logo";
+import fetch from "node-fetch";  
 import Image from "./Image";
 
 function Login() {
@@ -19,39 +20,30 @@ function Login() {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  if (!captchaToken) return alert("Please complete the CAPTCHA");
 
-    if (!captchaToken) {
-      return alert("Please complete the CAPTCHA");
-    }
+  try {
+    const response = await fetch("/api/v1/routes/login", { /*…*/ });
+    const data = await response.json();
 
-    try {
-      const response = await fetch(
-        "https://studentapp.i-tech.net.in/api/v1/routes/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ username, password, captchaToken }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        dispatch(loginSuccess(data)); // Store user & token in Redux
-        navigate("/");
-      } else {
-        alert(data.message);
-        recaptchaRef.current.reset();
-        setCaptchaToken("");
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
+    if (response.ok) {
+      dispatch(loginSuccess(data));
+      recaptchaRef.current.reset();    // fresh token next time
+      setCaptchaToken("");
+      navigate("/");
+    } else {
+      alert(data.message);
       recaptchaRef.current.reset();
       setCaptchaToken("");
     }
-  };
+  } catch (error) {
+    console.error("Login failed:", error);
+    recaptchaRef.current.reset();
+    setCaptchaToken("");
+  }
+};
+
 
   return (
     <div className="inset-0 h-screen w-screen flex flex-col md:flex-row">

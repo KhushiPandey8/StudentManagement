@@ -1,21 +1,28 @@
-import mysql from 'mysql';
+// backend/utils/db.js
 import dotenv from 'dotenv';
 dotenv.config();
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
+import mysql from 'mysql2';
+
+const pool = mysql.createPool({
+  connectionLimit: 20,              // max parallel connections
+  host: process.env.DB_HOST,        // e.g. 93.127.208.1
+  port: Number(process.env.DB_PORT),
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
 });
 
-db.connect((err) => {
+// Optional: test the pool on startup
+pool.getConnection((err, connection) => {
   if (err) {
-    console.error('Connection error:', err);
-    return;
+    console.error('❌ MySQL pool connection error:', err.code, err.message);
+    process.exit(1); // exit if you want to fail-fast
   }
-  console.log('MySQL connected successfully!');
+  console.log('✅ MySQL pool connected successfully');
+  connection.release();
 });
 
-export default db;
+// Export the promise-based pool API
+export default pool.promise();
+yy
