@@ -1,26 +1,25 @@
-import mysql from 'mysql';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Create a connection pool instead of a single connection
+import mysql from 'mysql2';
+
 const pool = mysql.createPool({
-  connectionLimit: 20, // Adjust based on your load and MySQL hosting plan
+  connectionLimit: 20,
   host: process.env.DB_HOST,
+  port: +process.env.DB_PORT,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-  connectTimeout: 10000, // 10 seconds
+  database: process.env.DB_NAME
 });
 
-// Log when connection pool is created
-pool.getConnection((err, connection) => {
+// Test & log any connection errors
+pool.getConnection((err, conn) => {
   if (err) {
-    console.error('❌ MySQL pool connection error:', err.message);
+    console.error('❌ MySQL pool connection error:', err.code, err.message);
   } else {
-    console.log('✅ MySQL pool connected successfully!');
-    connection.release();
+    console.log('✅ MySQL pool connected successfully');
+    conn.release();
   }
 });
 
-export default pool;
+export default pool.promise(); // use promise-based pool
