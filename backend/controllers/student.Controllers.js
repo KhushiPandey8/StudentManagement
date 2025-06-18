@@ -7,7 +7,8 @@ import fetch from "node-fetch";
 dotenv.config();
 
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET_KEY;
-const JWT_SECRET     = process.env.JWT_SECRET;
+const SECRET_KEY = process.env.JWT_SECRET || "mysecretkey";
+
 
 export const login = async (req, res) => {
   const { username, password, captchaToken } = req.body;
