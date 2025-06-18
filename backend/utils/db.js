@@ -25,4 +25,3 @@ pool.getConnection((err, connection) => {
 
 // Export the promise-based pool API
 export default pool.promise();
-yy
