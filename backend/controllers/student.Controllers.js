@@ -64,7 +64,7 @@ export const login = async (req, res) => {
     const user = rows[0];
     const token = jwt.sign(
       { id: user.id, name_contactid: user.name_contactid },
-      JWT_SECRET,
+      SECRET_KEY,
       { expiresIn: "30d" }
     );
 
