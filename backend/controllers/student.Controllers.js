@@ -40,7 +40,7 @@ export const login = async (req, res) => {
     return res.status(500).json({ message: "CAPTCHA verification service error." });
   }
 
-  // ✅ 2. Query DB using MySQL2 Pool (async/await)
+  
   try {
     const [rows] = await db.query(
       `SELECT id, username, password, contact, date12, name, branch, course, address, EmailId, status, name_contactid
