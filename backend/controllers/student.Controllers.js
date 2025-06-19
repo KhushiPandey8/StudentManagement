@@ -1,7 +1,7 @@
 import db from "../utils/db.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import fetch from "node-fetch"; // ✅ Make sure this is installed
+import fetch from "node-fetch"; 
 
 dotenv.config();
 
@@ -20,7 +20,6 @@ export const login = async (req, res) => {
     return res.status(400).json({ message: "CAPTCHA token missing." });
   }
 
-  // ✅ 1. Verify CAPTCHA immediately
   try {
     const params = new URLSearchParams();
     params.append("secret", RECAPTCHA_SECRET);
@@ -88,6 +87,7 @@ export const authenticateJWT = (req, res, next) => {
     next();
   });
 };
+
 export const getBatch = (req, res) => {
   const { name_contactid } = req.user; // Extracted from token
 

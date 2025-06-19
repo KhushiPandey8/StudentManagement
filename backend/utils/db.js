@@ -19,7 +19,7 @@ pool.getConnection((err, connection) => {
     console.error('❌ MySQL pool connection error:', err.code, err.message);
     process.exit(1); // exit if you want to fail-fast
   }
-  console.log('✅ MySQL pool connected successfully');
+  console.log('MySQL pool connected successfully');
   connection.release();
 });
 
