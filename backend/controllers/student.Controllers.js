@@ -48,7 +48,9 @@ export const login = async (req, res) => {
        WHERE username = ? AND password = ?`,
       [username, password]
     );
-
+     
+    console.log("Query result:", rows); 
+    
     if (rows.length === 0) {
       return res.status(401).json({ message: "Invalid username or password." });
     }
