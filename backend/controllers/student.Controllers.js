@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 
-
 dotenv.config();
 
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET_KEY;
