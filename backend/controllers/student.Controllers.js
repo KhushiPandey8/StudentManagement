@@ -1,93 +1,71 @@
 import db from "../utils/db.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-
+import fetch from "node-fetch"; // ✅ Make sure this is installed
 
 dotenv.config();
 
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET_KEY;
-const SECRET_KEY = process.env.JWT_SECRET || "mysecretkey";
+const JWT_SECRET = process.env.JWT_SECRET;
 
-// Login endpoint
 export const login = async (req, res) => {
-  const { username, password, captchaToken } = req.body; // Using username
-  console.log("Login data received:", username);
+  const { username, password, captchaToken } = req.body;
+  console.log("Login attempt from:", username);
 
-  // 1) basic payload check
   if (!username || !password) {
-    return res
-      .status(400)
-      .json({ message: "Username and password are required." });
+    return res.status(400).json({ message: "Username and password are required." });
   }
+
   if (!captchaToken) {
     return res.status(400).json({ message: "CAPTCHA token missing." });
   }
 
-  // 2) verify reCAPTCHA
+  // ✅ 1. Verify CAPTCHA immediately
   try {
     const params = new URLSearchParams();
     params.append("secret", RECAPTCHA_SECRET);
     params.append("response", captchaToken);
 
-    const r = await fetch(
-      "https://www.google.com/recaptcha/api/siteverify",
-      { method: "POST", body: params }
-    );
-    const captchaRes = await r.json();
-    if (!captchaRes.success) {
-      console.warn("reCAPTCHA failed:", captchaRes["error-codes"]);
-      return res
-        .status(401)
-        .json({ message: "CAPTCHA failed—are you a robot?" });
+    const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      body: params
+    });
+
+    const data = await response.json();
+    if (!data.success) {
+      console.warn("reCAPTCHA failed:", data["error-codes"]);
+      return res.status(401).json({ message: "CAPTCHA verification failed." });
     }
   } catch (err) {
     console.error("CAPTCHA verification error:", err);
-    return res
-      .status(500)
-      .json({ message: "CAPTCHA verification service error." });
+    return res.status(500).json({ message: "CAPTCHA verification service error." });
   }
 
-  // 3) credential check
-  const sql =
-    "SELECT id, username, password, contact, date12, name, branch, course, address, EmailId, status, name_contactid FROM student WHERE username = ? AND password = ?";
-  db.query(sql, [username, password], (err, result) => {
-    if (err) {
-      console.error("Server error:", err);
-      return res.status(500).json({ message: "Server error." });
-    }
-
-    if (result.length === 0) {
-      return res
-        .status(401)
-        .json({ message: "Invalid Username or Password." });
-    }
-
-    const user = result[0];
-    const token = jwt.sign(
-      { id: user.id, name_contactid: user.name_contactid },
-      SECRET_KEY,
-      { expiresIn: "30d" }
+  // ✅ 2. Query DB using MySQL2 Pool (async/await)
+  try {
+    const [rows] = await db.query(
+      `SELECT id, username, password, contact, date12, name, branch, course, address, EmailId, status, name_contactid
+       FROM student
+       WHERE username = ? AND password = ?`,
+      [username, password]
     );
 
-    res.json({
-      token,
-      user: {
-        id: user.id,
-        username: user.username, // Returning username instead of contact
-        name: user.name,
-        name_contactid: user.name_contactid,
-        branch: user.branch,
-        course: user.course,
-        password: user.password,
-        address: user.address,
-        EmailId: user.EmailId,
-        status: user.status,
-        date12: user.date12,
-        contact: user.contact,
-      },
+    if (rows.length === 0) {
+      return res.status(401).json({ message: "Invalid username or password." });
+    }
+
+    const user = rows[0];
+    const token = jwt.sign({ id: user.id, name_contactid: user.name_contactid }, JWT_SECRET, {
+      expiresIn: "30d",
     });
-  });
+
+    return res.json({ token, user });
+  } catch (err) {
+    console.error("DB error:", err);
+    return res.status(500).json({ message: "Login failed due to server error." });
+  }
 };
+
 
 export const logout = (req, res) => {
   return res.status(200).json({

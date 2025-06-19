@@ -36,9 +36,7 @@ function Login() {
 
     const data = await response.json();
 
-    // ✅ Reset CAPTCHA no matter what
-    recaptchaRef.current.reset();
-    setCaptchaToken("");
+    recaptchaRef.current.reset(); // always reset
 
     if (response.ok) {
       dispatch(loginSuccess(data));
@@ -49,9 +47,9 @@ function Login() {
   } catch (error) {
     console.error("Login failed:", error);
     recaptchaRef.current.reset();
-    setCaptchaToken("");
   }
 };
+
 
 
   return (
